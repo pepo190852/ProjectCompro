@@ -2,35 +2,45 @@
 #include<windows.h>
 #include<conio.h>
 #include<string>
+#include "draft.cpp"
 using namespace std;
+string state;
 void centertext(string x){
 	for(int i=0;i<(84-x.length())/2;i++)cout<<" ";
 	cout<<x<<"\n";
 }
 void viewchampions(){
-	cout<<"champions";
+	state="viewchampions";
+	system("CLS");
+	cout<<"press 'b' to go back...";
 }
 int main(){
+	//adjust console's size
 	HWND console = GetConsoleWindow();
 	RECT ConsoleRect;
 	GetWindowRect(console, &ConsoleRect); 
    MoveWindow(console, ConsoleRect.left, ConsoleRect.top, 640, 480, TRUE);
+   //clear screen
+   system("CLS");
+   //set current state and cout menu
+   state="main";
    cout<<"\n";
    string title="CLASH OF CHAMPIONS",play="press 'p' to play!!!",viewc="press 'v' to view champions!",quit="press 'q' to quit";
    centertext(title);
    centertext(play);
    centertext(viewc);
    centertext(quit);
-   char o;
-   if(_getch()=='v'){
+   //below is a main menu code, each pressed button should only work when there is a showed description. Ex. press q to quit only at main menu, in other state but main menu, press q should not quit the game
+   char p;
+   while(p!='q'){
+   	p= _getch();
+   	if(p=='v'&&state=="main"){
    		viewchampions();
 	   }
-   while(o!='q'){
-   	o=_getch();
-   	if(o=='v'||o=='p'){
-   		break;
-	   }
+	if(p=='b'&&state!="main"){
+		main();
+		state="main";
+	}
    }
-   if(o=='v')viewchampions();
    return 0;
 }
