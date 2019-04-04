@@ -2,16 +2,12 @@
 #include<windows.h>
 #include<conio.h>
 #include<string>
+#include "draft.cpp"
 using namespace std;
 string state;
 void centertext(string x){
 	for(int i=0;i<(84-x.length())/2;i++)cout<<" ";
 	cout<<x<<"\n";
-}
-void viewchampions(){
-	state="viewchampions";
-	system("CLS");
-	cout<<"press 'b' to go back...";
 }
 int main(){
 	//adjust console's size
@@ -30,16 +26,36 @@ int main(){
    centertext(viewc);
    centertext(quit);
    //below is a main menu code, each pressed button should only work when there is a showed description. Ex. press q to quit only at main menu, in other state but main menu, press q should not quit the game
-   char p;
-   while(p!='q'){
-   	p= _getch();
-   	if(p=='v'&&state=="main"){
-   		viewchampions();
+   char p='a';
+   int i=0;
+   while(p!='p'||p!='v'||p!='q'){
+   	char p=_getch();
+   }
+   while(p=='v'){
+   	system("CLS");
+   	champion view=upload(i);
+   	centertext(view.name);
+   	for(int j=0;j<view.tag.size();j++)cout<<view.tag[j]<<", ";
+   	viewstat(view);
+   	viewskill(view);
+   	cout<<"'w' to go up 's' to go down 'b' to back to main menu...";
+   	while(p!='w'||p!='s'||p!='b'){
+   		char p=_getch();
 	   }
-	if(p=='b'&&state!="main"){
-		main();
-		state="main";
-	}
+	   if(p=='w'){
+	   	i--;
+	   	p='v';
+	   }
+	   else if(p=='s'){
+	   	i++;
+	   	p='v';
+	   }else break;
+   }
+   while(p=='p'){
+   	
+   }
+   if(p=='b'){
+   	main();
    }
    return 0;
 }
