@@ -2,7 +2,6 @@
 #include<windows.h>
 #include<conio.h>
 #include<string>
-#include "draft.cpp"
 using namespace std;
 string state;
 void centertext(string x){
