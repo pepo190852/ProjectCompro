@@ -102,13 +102,72 @@ int main(){
 	}
 	else if(draftstate==2){
 			for(int j=0;j<10;j++){
+				if(ban){
+					if(j==0||j==4){
+						for(int k=0;k<4;k++){
+								while(p=='p'){
+									system("CLS");
+									if(k%2==0)centertext("Player 1's turn to BAN!!");
+									else centertext("Player 2's turn to BAN!!");
+									if(!share_pool){
+										while(banned[i]||picked[i]){
+											if(i==champions_num-1)i=0;
+	   										else i++;
+										}
+									}else{
+										while(banned[i]){
+										if(i==champions_num-1)i=0;
+	   									else i++;
+										}
+									}
+									view=upload(i);
+   									centertext(view.name);
+   									for(int k=0;k<view.tag.size();k++)cout<<view.tag[k]<<", ";
+   									viewstat(view);
+   									viewskill(view);
+   									if(k%2==0){
+   										cout<<"'d' to BAN!! 'w' to go up 's' to go down 'b' to go back to main menu...";
+   										while(p!='d'||p!='w'||p!='s'||p!='b'){
+   											p=_getch();
+					  				 	}
+									   }else{
+									   	cout<<"'k' to BAN!! 'o' to go up 'l' to go down 'b' to go back to main menu...";
+   										while(p!='k'||p!='o'||p!='l'||p!='b'){
+   											p=_getch();
+					  				 	}
+									   }
+									if(p=='w'){
+	   										if(i==0)i=champions_num-1;
+	   										else i--;
+	   										p='p';
+	   									}
+	  								else if(p=='s'){
+	   									if(i==champions_num-1)i=0;
+	   									else i++;
+	   									p='p';
+	 								  }else if(p=='d'||p=='k')ban[i]=true;
+								}
+								if(p=='b')break;
+								else p='p';
+							}
+							
+						}
+					}
+				}
 				choose=false;
 				while(queue[j]==1&&p=='p'){
 					system("CLS");
 					centertext("Player 1's turn to DRAFT!!!");
-					while(banned[i]){
+					if(!share_pool){
+						while(banned[i]||picked[i]){
 						if(i==champions_num-1)i=0;
 	   					else i++;
+						}
+					}else{
+						while(banned[i]){
+						if(i==champions_num-1)i=0;
+	   					else i++;
+						}
 					}
 					view=upload(i);
    					centertext(view.name);
@@ -133,9 +192,16 @@ int main(){
 					while(queue[j]==2&&p=='p'){
 					system("CLS");
 					centertext("Player 2's turn to DRAFT!!!");
-					while(banned[i]){
+					if(!share_pool){
+						while(banned[i]||picked[i]){
 						if(i==champions_num-1)i=0;
 	   					else i++;
+						}
+					}else{
+						while(banned[i]){
+						if(i==champions_num-1)i=0;
+	   					else i++;
+						}
 					}
 					view=upload(i);
    					centertext(view.name);
