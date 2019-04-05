@@ -1,6 +1,6 @@
 #include "form.h"
 #include "spartan.h"
-struct upload(int i){
+champion upload(int i){
 	if(i==0)return spartan;
 }
 void viewstat(champion view){

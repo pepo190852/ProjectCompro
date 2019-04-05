@@ -2,7 +2,8 @@
 struct target{
 	string name;
 	vector<string> tag;
-	int stat[9][2],hp;
+	int stat[9][2],hp,id,player;
+	double statmultplier[9]={1,1,1,1,1,1,1,1,1};
 	vector<string> buff;
 	vector<string> buff_timer;
 	vector<string> debuff;
