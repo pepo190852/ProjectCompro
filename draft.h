@@ -68,3 +68,23 @@ void viewskill(champion x){
 		cout<<")\n"<<x.skill[i].des<<"\n";
 	}
 }
+void viewdraft(target view[]){
+	char p='p';
+	system("CLS");
+	cout<<"Player 1's Champions...\n";
+	for(int l=0;l<10;l++){
+		if(view[l].id!=0&&view[l].player==1){
+			cout<<view[l].name<<"\n";
+		}
+	}
+	cout<<"Player 2's Champions...\n";
+	for(int l=0;l<10;l++){
+		if(view[l].id!=0&&view[l].player==2){
+			cout<<view[l].name<<"\n";
+		}
+	}
+	cout<<"'v' to go back";
+	while(p!='v'){
+		p=_getch();
+	}
+}

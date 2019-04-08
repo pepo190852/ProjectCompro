@@ -36,6 +36,10 @@ int main(){
    }
    champion view;
    target pos[10];
+   for(int j=0;j<10;j++){
+   	pos[j].id=0;
+   	pos[j].player=0;
+   }
    int queue[10]={1,2,2,1,1,2,2,1,1,2},p1_f=0,p2_f=5;
    while(p!='p'||p!='v'||p!='q'){
    	char p=_getch();
@@ -103,7 +107,7 @@ int main(){
 	else if(draftstate==2){
 			for(int j=0;j<10;j++){
 				if(ban){
-					if(j==0||j==4){
+					if(j==0||j==4||j==8){
 						for(int k=0;k<4;k++){
 								while(p=='p'){
 									system("CLS");
@@ -126,13 +130,13 @@ int main(){
    									viewstat(view);
    									viewskill(view);
    									if(k%2==0){
-   										cout<<"'d' to BAN!! 'w' to go up 's' to go down 'b' to go back to main menu...";
-   										while(p!='d'||p!='w'||p!='s'||p!='b'){
+   										cout<<"'d' to BAN!! 'w' to go up 's' to go down 'v' to view drafted 'b' to go back to main menu...";
+   										while(p!='d'||p!='w'||p!='s'||p!='b'||p!='v'){
    											p=_getch();
 					  				 	}
 									   }else{
-									   	cout<<"'k' to BAN!! 'o' to go up 'l' to go down 'b' to go back to main menu...";
-   										while(p!='k'||p!='o'||p!='l'||p!='b'){
+									   	cout<<"'k' to BAN!! 'o' to go up 'l' to go down 'v' to view drafted 'b' to go back to main menu...";
+   										while(p!='k'||p!='o'||p!='l'||p!='b'||p!='v'){
    											p=_getch();
 					  				 	}
 									   }
@@ -145,15 +149,18 @@ int main(){
 	   									if(i==champions_num-1)i=0;
 	   									else i++;
 	   									p='p';
+	 								  }else if(p=='v'){
+	   									viewdraft(pos);
+	   									p='p';
 	 								  }else if(p=='d'||p=='k')ban[i]=true;
 								}
 								if(p=='b')break;
 								else p='p';
+								if(j==8&&k==1)break;
 							}
 							
 						}
 					}
-				}
 				choose=false;
 				while(queue[j]==1&&p=='p'){
 					system("CLS");
@@ -174,8 +181,8 @@ int main(){
    					for(int k=0;k<view.tag.size();k++)cout<<view.tag[k]<<", ";
    					viewstat(view);
    					viewskill(view);
-   					cout<<"'d' to DRAFT!!! 'w' to go up 's' to go down 'b' to go back to main menu...";
-   					while(p!='d'||p!='w'||p!='s'||p!='b'){
+   					cout<<"'d' to DRAFT!!! 'w' to go up 's' to go down 'v' to view drafted 'b' to go back to main menu...";
+   					while(p!='d'||p!='w'||p!='s'||p!='b'||p!='v'){
    						p=_getch();
 					   }
 					if(p=='w'){
@@ -187,7 +194,11 @@ int main(){
 	   					if(i==champions_num-1)i=0;
 	   					else i++;
 	   					p='p';
-	 				  }else if(p=='d')choose=true;	
+	 				  }else if(p=='v'){
+	   									viewdraft(pos);
+	   									p='p';
+	 								  }
+					   else if(p=='d')choose=true;	
 					 }
 					while(queue[j]==2&&p=='p'){
 					system("CLS");
@@ -208,8 +219,8 @@ int main(){
    					for(int k=0;k<view.tag.size();k++)cout<<view.tag[k]<<", ";
    					viewstat(view);
    					viewskill(view);
-   					cout<<"'k' to DRAFT!!! 'o' to go up 'l' to go down 'b' to go back to main menu...";
-   					while(p!='k'||p!='o'||p!='l'||p!='b'){
+   					cout<<"'k' to DRAFT!!! 'o' to go up 'l' to go down 'v' to view drafted 'b' to go back to main menu...";
+   					while(p!='k'||p!='o'||p!='l'||p!='b'||p!='v'){
    						p=_getch();
 					   }
 					if(p=='o'){
@@ -221,7 +232,11 @@ int main(){
 	   					if(i==champions_num-1)i=0;
 	   					else i++;
 	   					p='p';
-	 				  }else if(p=='k')choose=true;
+	 				  }else if(p=='v'){
+	   									viewdraft(pos);
+	   									p='p';
+	 								  }
+					   else if(p=='k')choose=true;
 					 }
 					 if(choose){
 					 	pos[j].name=view.name;
@@ -242,38 +257,14 @@ int main(){
 						 }
 						 if(p=='b')break;	
 					 }
+					 draftstate++;
 				}
-				/*for(int k=0;k<4;k++){
-					while(p=='p'){
-					view=upload(i);
-   					centertext(view.name);
-   					for(int j=0;j<view.tag.size();j++)cout<<view.tag[j]<<", ";
-   					viewstat(view);
-   					viewskill(view);
-   					cout<<"'g' to BAN!! 'w' to go up 's' to go down";
-   					while(p!='g'||p!='w'||p!='s'){
-   						p=_getch();
-					   }
-					   if(p=='w'){
-	   						if(i==0)i=champions_num-1;
-	   						else i--;
-	   						p='p';
-	   					}
-	  				 else if(p=='s'){
-	   					if(i==champions_num-1)i=0;
-	   					else i++;
-	   					p='p';
-	 				  }else{
-	 				  	pos[]
-					   }
-					}
-				}*/
-			
+				else if(draftstate==3){
+					
+				}
 			}
-	}
-   }
-   if(p=='b'){
-   	main();
-   }
-   return 0;
-}
+			if(p=='b'){
+   				main();
+  			 }	
+		return 0;	
+			}
