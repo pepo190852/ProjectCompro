@@ -2,7 +2,7 @@
 #include<windows.h>
 #include<conio.h>
 #include<string>
-#include "draft.cpp"
+#include "draft.h"
 using namespace std;
 int champions_num=1;
 string state;
@@ -14,7 +14,7 @@ int main(){
 	//adjust console's size
 	HWND console = GetConsoleWindow();
 	RECT ConsoleRect;
-	GetWindowRect(console, &ConsoleRect); 
+	GetWindowRect(console, &ConsoleRect);
    MoveWindow(console, ConsoleRect.left, ConsoleRect.top, 640, 480, TRUE);
    //clear screen
    system("CLS");
@@ -158,7 +158,7 @@ int main(){
 								else p='p';
 								if(j==8&&k==1)break;
 							}
-							
+
 						}
 					}
 				choose=false;
@@ -198,7 +198,7 @@ int main(){
 	   									viewdraft(pos);
 	   									p='p';
 	 								  }
-					   else if(p=='d')choose=true;	
+					   else if(p=='d')choose=true;
 					 }
 					while(queue[j]==2&&p=='p'){
 					system("CLS");
@@ -255,16 +255,41 @@ int main(){
 	 					for(int k=0;k<view.skill.size();k++)pos[j].skill.push_back(view.skill[k]);
 	 					picked[i]==true;
 						 }
-						 if(p=='b')break;	
+						 if(p=='b')break;
 					 }
 					 draftstate++;
 				}
 				else if(draftstate==3){
-					
+						bool endgame = false;
+						int tm[10]={0,0,0,0,0,0,0,0,0,0};
+						while(!endgame){
+							int check;
+							for(int i=0;i<9;i++){
+								tm[i]+=pos[i].stat[8][0];
+							}
+							for(int i=0;i<9;i++){
+								if(tm[i]=>100){
+									check=i;
+									tm[i]=0;
+									break;
+								}
+							}
+							viewstat(pos[check].name);
+
+
+
+
+
+
+
+
+
+							//if all hp of player1 or player2 is reached 0 then endgame = true
+						}
 				}
 			}
 			if(p=='b'){
    				main();
-  			 }	
-		return 0;	
+  			 }
+		return 0;
 			}
