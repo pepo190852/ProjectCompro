@@ -62,12 +62,12 @@ prophet.skill[1].cd=9;
 prophet.skill[1].bcd=9;
 prophet.skill[1].des="Deal dmg to all enemies which can't be evaded. Starts on cooldown.";
 void celestialapocalypse(){
-	base_dmg=5.2;
 	system("CLS");
 		skill_use(1);
 		for(int i=0;i<10;i++){
 			if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
 				enemy=i;
+				base_dmg=5.2;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			}
