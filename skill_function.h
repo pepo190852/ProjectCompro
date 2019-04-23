@@ -1,3 +1,4 @@
+#include "form.h"
 int targetenemy(string name,string des){
 	char key[10]={'i','q','w','o','p','e','a','k','l','s'},p='p';
 	while(p=='p'){

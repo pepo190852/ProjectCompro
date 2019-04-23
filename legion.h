@@ -1,6 +1,5 @@
 #include "form.h"
 #include "skill_function.h"
-#include "draft.h"
 champion legion;
 legion.name="Legion";
 legion.role="Tank";

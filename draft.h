@@ -1,6 +1,24 @@
 #include "form.h"
 #include "spartan.h"
 #include "samurai.h"
+#include "berserker.h"
+#include "jaguar.h"
+#include "crusader.h"
+#include "khopesh.h"
+#include "legion.h"
+#include "ninja.h"
+#include "monk.h"
+#include "shaman.h"
+#include "priest.h"
+#include "impi.h"
+#include "prophet.h"
+#include "eagle.h"
+#include "puma.h"
+#include "gladiator.h"
+#include "hoplite.h"
+#include "hypaspist.h"
+#include "zande.h"
+#include "immortal.h"*/
 //include more champion header
 champion upload(int i){
 	return champions[i];
@@ -8,6 +26,24 @@ champion upload(int i){
 void use_skill(int id,int skill_num){
 	if(id==0)spartan(skill_num);
 	else if(id==1)samurai(skill_num);
+	else if(id==2)samurai(skill_num);
+	else if(id==3)samurai(skill_num);
+	else if(id==4)samurai(skill_num);
+	else if(id==5)samurai(skill_num);
+	else if(id==6)samurai(skill_num);
+	else if(id==7)samurai(skill_num);
+	else if(id==8)samurai(skill_num);
+	else if(id==9)samurai(skill_num);
+	else if(id==10)samurai(skill_num);
+	else if(id==11)samurai(skill_num);
+	else if(id==12)samurai(skill_num);
+	else if(id==13)samurai(skill_num);
+	else if(id==14)samurai(skill_num);
+	else if(id==15)samurai(skill_num);
+	else if(id==16)samurai(skill_num);
+	else if(id==17)samurai(skill_num);
+	else if(id==18)samurai(skill_num);
+	else if(id==19)samurai(skill_num);
 }
 void update_stat(){
 	double multiplier,hp_percent,pre_max_hp;
@@ -146,7 +182,7 @@ void view_status(){
 			if(pos[view].heal_block>0)cout<<" Heal Blocked("<<pos[view].heal_block<<")";
 			if(pos[view].knock>0)cout<<" Knocked("<<pos[view].knock<<")";
 			if(pos[view].stealth>0)cout<<" Stealth("<<pos[view].stealth<<")";
-			if(pos[view].protect>0)cout<<" Protect("<<pos[view].protect<<")"";
+			if(pos[view].protect>0)cout<<" Protect("<<pos[view].protect<<")";
 			if(pos[view].bleed.size()>0)cout<<" Bleed x"<<pos[view].bleed.size();
 			if(pos[view].regeneration.size()>0)cout<<" Regeneration x"<<pos[view].regeneration.size();
 		cout<<"'b' to go back...";

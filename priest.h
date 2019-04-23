@@ -1,6 +1,5 @@
 #include "form.h"
 #include "skill_function.h"
-#include "draft.h"
 champion priest;
 priest.name="Priest";
 priest.role="Support";

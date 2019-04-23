@@ -1,6 +1,5 @@
 #include "form.h"
 #include "skill_function.h"
-#include "draft.h"
 champion gladiator;
 gladiator.name="Gladiator";
 gladiator.role="Attacker";

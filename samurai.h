@@ -1,4 +1,3 @@
-#include "draft.h"
 #include "form.h"
 #include "skill_function.h"
 champion samurai;

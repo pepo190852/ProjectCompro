@@ -1,6 +1,5 @@
 #include "form.h"
 #include "skill_function.h"
-#include "draft.h"
 champion impi;
 impi.name="Impi";
 impi.role="Attacker";

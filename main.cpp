@@ -1,7 +1,7 @@
-#include<iostream>
 #include<windows.h>
-#include<conio.h>
-#include<string>
+#include "form.h"
+#include "skill_function.h"
+#include "draft.h"
 using namespace std;
 int main(){
 	p='a';

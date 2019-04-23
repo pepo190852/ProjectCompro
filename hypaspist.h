@@ -1,6 +1,5 @@
 #include "form.h"
 #include "skill_function.h"
-#include "draft.h"
 champion hypaspist;
 hypaspist.name="Hypaspist";
 hypaspist.role="Attacker";
