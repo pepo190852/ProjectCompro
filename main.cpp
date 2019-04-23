@@ -2,15 +2,10 @@
 #include<windows.h>
 #include<conio.h>
 #include<string>
-#include "draft.h"
 using namespace std;
-int champions_num=1;
-string state;
-void centertext(string x){
-	for(int i=0;i<(84-x.length())/2;i++)cout<<" ";
-	cout<<x<<"\n";
-}
 int main(){
+	p='a';
+	srand(time(0));
 	//adjust console's size
 	HWND console = GetConsoleWindow();
 	RECT ConsoleRect;
@@ -19,49 +14,43 @@ int main(){
    //clear screen
    system("CLS");
    //set current state and cout menu
-   state="main";
    cout<<"\n";
-   string title="CLASH OF CHAMPIONS",play="press 'p' to play!!!",viewc="press 'v' to view champions!",quit="press 'q' to quit";
-   centertext(title);
-   centertext(play);
-   centertext(viewc);
-   centertext(quit);
+   centertext("CLASH OF CHAMPIONS");
+   centertext("press 'p' to play!!!");
+   centertext("press 'v' to view champions!");
+   centertext("press 'q' to quit");
    //below is a main menu code, each pressed button should only work when there is a showed description. Ex. press q to quit only at main menu, in other state but main menu, press q should not quit the game
-   char p='a';
-   int i=0,draftstate=0,player_draft=1;
-   bool ban,share_pool,banned[champions_num],picked[champions_num],choose=false;
-   for(int j=0;j<champions_num;j++){
+   int i=0,draftstate=0,player_draft=1,hp1=1,hp2=1,turn,tp=0,skill_num=-1;
+   bool ban,share_pool,banned[champions.size()],picked[champions.size()],choose=false;
+   for(int j=0;j<champions.size();j++){
    	banned[j]=false;
    	picked[j]=false;
    }
    champion view;
-   target pos[10];
-   for(int j=0;j<10;j++){
-   	pos[j].id=0;
-   	pos[j].player=0;
-   }
    int queue[10]={1,2,2,1,1,2,2,1,1,2},p1_f=0,p2_f=5;
-   while(p!='p'||p!='v'||p!='q'){
+   while(p!='p'&&p!='v'&&p!='q'){
    	char p=_getch();
    }
    while(p=='v'){
    	system("CLS");
    	view=upload(i);
    	centertext(view.name);
-   	for(int j=0;j<view.tag.size();j++)cout<<view.tag[j]<<", ";
+   	centertext(view.role);
+   	for(int j=0;j<view.tag.size();j++)cout<<view.tag[j]<<" ";
+   	cout<<"\n";
    	viewstat(view);
    	viewskill(view);
    	cout<<"'w' to go up 's' to go down 'b' to back to main menu...";
-   	while(p!='w'||p!='s'||p!='b'){
+   	while(p!='w'&&p!='s'&&p!='b'){
    		p=_getch();
 	   }
 	   if(p=='w'){
-	   	if(i==0)i=champions_num-1;
+	   	if(i==0)i=champions.size()-1;
 	   	else i--;
 	   	p='v';
 	   }
 	   else if(p=='s'){
-	   	if(i==champions_num-1)i=0;
+	   	if(i==champions.size()-1)i=0;
 	   	else i++;
 	   	p='v';
 	   }else break;
@@ -73,7 +62,7 @@ int main(){
    		centertext("'y' yes");
    		centertext("'n' no");
    		centertext("'b' back");
-   		while(p!='y'||p!='n'||p!='b'){
+   		while(p!='y'&&p!='n'&&p!='b'){
    			p=_getch();
 	  	 }
 	  	if(p=='y'){
@@ -115,23 +104,25 @@ int main(){
 									else centertext("Player 2's turn to BAN!!");
 									if(!share_pool){
 										while(banned[i]||picked[i]){
-											if(i==champions_num-1)i=0;
+											if(i==champions.size()-1)i=0;
 	   										else i++;
 										}
 									}else{
 										while(banned[i]){
-										if(i==champions_num-1)i=0;
+										if(i==champions.size()-1)i=0;
 	   									else i++;
 										}
 									}
 									view=upload(i);
    									centertext(view.name);
-   									for(int k=0;k<view.tag.size();k++)cout<<view.tag[k]<<", ";
+   									centertext(view.role);
+   									for(int m=0;m<view.tag.size();m++)cout<<view.tag[m]<<" ";
+   									cout<<"\n";
    									viewstat(view);
    									viewskill(view);
    									if(k%2==0){
    										cout<<"'d' to BAN!! 'w' to go up 's' to go down 'v' to view drafted 'b' to go back to main menu...";
-   										while(p!='d'||p!='w'||p!='s'||p!='b'||p!='v'){
+   										while(p!='d'&&p!='w'&&p!='s'&&p!='b'&&p!='v'){
    											p=_getch();
 					  				 	}
 									   }else{
@@ -140,13 +131,13 @@ int main(){
    											p=_getch();
 					  				 	}
 									   }
-									if(p=='w'){
-	   										if(i==0)i=champions_num-1;
+									if(p=='w'||p=='o'){
+	   										if(i==0)i=champions.size()-1;
 	   										else i--;
 	   										p='p';
 	   									}
-	  								else if(p=='s'){
-	   									if(i==champions_num-1)i=0;
+	  								else if(p=='s'||p=='l'){
+	   									if(i==champions.size()-1)i=0;
 	   									else i++;
 	   									p='p';
 	 								  }else if(p=='v'){
@@ -167,18 +158,20 @@ int main(){
 					centertext("Player 1's turn to DRAFT!!!");
 					if(!share_pool){
 						while(banned[i]||picked[i]){
-						if(i==champions_num-1)i=0;
+						if(i==champions.size()-1)i=0;
 	   					else i++;
 						}
 					}else{
 						while(banned[i]){
-						if(i==champions_num-1)i=0;
+						if(i==champions.size()-1)i=0;
 	   					else i++;
 						}
 					}
 					view=upload(i);
    					centertext(view.name);
-   					for(int k=0;k<view.tag.size();k++)cout<<view.tag[k]<<", ";
+   					centertext(view.role);
+   					for(int m=0;m<view.tag.size();m++)cout<<view.tag[m]<<" ";
+   					cout<<"\n";
    					viewstat(view);
    					viewskill(view);
    					cout<<"'d' to DRAFT!!! 'w' to go up 's' to go down 'v' to view drafted 'b' to go back to main menu...";
@@ -186,12 +179,12 @@ int main(){
    						p=_getch();
 					   }
 					if(p=='w'){
-	   						if(i==0)i=champions_num-1;
+	   						if(i==0)i=champions.size()-1;
 	   						else i--;
 	   						p='p';
 	   					}
 	  				else if(p=='s'){
-	   					if(i==champions_num-1)i=0;
+	   					if(i==champions.size()-1)i=0;
 	   					else i++;
 	   					p='p';
 	 				  }else if(p=='v'){
@@ -205,18 +198,20 @@ int main(){
 					centertext("Player 2's turn to DRAFT!!!");
 					if(!share_pool){
 						while(banned[i]||picked[i]){
-						if(i==champions_num-1)i=0;
+						if(i==champions.size()-1)i=0;
 	   					else i++;
 						}
 					}else{
 						while(banned[i]){
-						if(i==champions_num-1)i=0;
+						if(i==champions.size()-1)i=0;
 	   					else i++;
 						}
 					}
 					view=upload(i);
    					centertext(view.name);
-   					for(int k=0;k<view.tag.size();k++)cout<<view.tag[k]<<", ";
+   					centertext(view.role);
+   					for(int m=0;m<view.tag.size();m++)cout<<view.tag[m]<<" ";
+   					cout<<"\n";
    					viewstat(view);
    					viewskill(view);
    					cout<<"'k' to DRAFT!!! 'o' to go up 'l' to go down 'v' to view drafted 'b' to go back to main menu...";
@@ -224,12 +219,12 @@ int main(){
    						p=_getch();
 					   }
 					if(p=='o'){
-	   						if(i==0)i=champions_num-1;
+	   						if(i==0)i=champions.size()-1;
 	   						else i--;
 	   						p='p';
 	   					}
 	  				else if(p=='l'){
-	   					if(i==champions_num-1)i=0;
+	   					if(i==champions.size()-1)i=0;
 	   					else i++;
 	   					p='p';
 	 				  }else if(p=='v'){
@@ -240,19 +235,15 @@ int main(){
 					 }
 					 if(choose){
 					 	pos[j].name=view.name;
-					 	for(int k=0;k<view.tag.size();k++)pos[j].tag.push_back(view.tag[k]);
-					 	pos[j].id=i;
+					 	for(int m=0;m<view.tag.size();m++)pos[j].tag.push_back(view.tag[m]);
+					 	pos[j].id=view.id;
 					 	pos[j].player=queue[j];
-					 	pos[j].stat[0][0]=view.hp;
-	 					pos[j].stat[1][0]=view.off;
-	 					pos[j].stat[2][0]=view.mdef;
-	 					pos[j].stat[3][0]=view.pdef;
-	 					pos[j].stat[4][0]=view.acc;
-	 					pos[j].stat[5][0]=view.eva;
-	 					pos[j].stat[6][0]=view.bc;
-	 					pos[j].stat[7][0]=view.ba;
-	 					pos[j].stat[8][0]=view.spd;
-	 					for(int k=0;k<view.skill.size();k++)pos[j].skill.push_back(view.skill[k]);
+					 	pos[j].base_stat.max_hp=view.hp;
+					 	pos[j].hp=view.hp;
+	 					pos[j].base_stat.atk=view.atk;
+	 					pos[j].base_stat.def=view.def;
+	 					pos[j].base_stat.spd=view.spd;
+	 					for(int k=0;k<2;k++)pos[j].skill[k]=view.skill[k];
 	 					picked[i]==true;
 						 }
 						 if(p=='b')break;
@@ -260,36 +251,47 @@ int main(){
 					 draftstate++;
 				}
 				else if(draftstate==3){
-						bool endgame = false;
-						int tm[10]={0,0,0,0,0,0,0,0,0,0};
-						while(!endgame){
-							int check;
-							for(int i=0;i<9;i++){
-								tm[i]+=pos[i].stat[8][0];
-							}
-							for(int i=0;i<9;i++){
-								if(tm[i]=>100){
-									check=i;
-									tm[i]=0;
-									break;
-								}
-							}
-							viewstat(pos[check].name);
-
-
-
-
-
-
-
-
-
-							//if all hp of player1 or player2 is reached 0 then endgame = true
+					update_stat();
+					while(hp1>0&&hp2>0){
+						turn=cal_turn_meter();
+						begin_turn();
+						skill_used=false;
+						enemy=-1;
+						if(pos[turn].hp>0&&!pos[turn].stun){
+							while(!skill_used){
+							skill_num=-1;
+							do{skill_num=start_turn();}while(pos[turn].skill[skill_num-1].cd>0);
+						use_skill(pos[turn].id,skill_num);
 						}
+						}else if(pos[turn].stun&&pos[turn].hp>0){
+							pos[turn].stun==false;
+							cout<<pos[turn].name<<" recovered from Stun.\n";
+						}else if(pos[turn].hp==0)defeat(turn);
+						endturn();
+						hp1=0;
+						hp2=0;
+						for(int m=0;m<10;m++){
+							if(pos[m].player==1)hp1+=pos[m].hp;
+							else hp2+=pos[m].hp;
+						}
+						if(hp1==0||hp2==0)break;
+						else{
+						if(pos[turn].player==1)cout<<"'d";
+						else cout<<"'j";
+						cout<<"' to continue...";
+					    if(pos[turn].player==1){
+					    	while(p!='d')p=_getch();
+						}else{
+							while(p!='j')p=_getch();
+						}
+						p='p';
+						}
+						}
+						if(hp1>0)centertext("PLAYER 1'S VICTORY!");
+						else centertext("PLAYER 2'S VICTORY!");
+						p='a';
+					}
 				}
-			}
-			if(p=='b'){
-   				main();
-  			 }
-		return 0;
+				if(p=='b')main();
+				return 0;
 			}
