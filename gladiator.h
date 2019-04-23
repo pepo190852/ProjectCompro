@@ -50,7 +50,7 @@ void quarternet(){
 		if(hit()){
 			stun(enemy);
 			remove_turn_meter(enemy,100);
-			dispel_buff(enemy);
+			int temp=dispel_buff(enemy);
 			gain(enemy,"Knock",2);
 			}
 	}

@@ -50,7 +50,7 @@ void risingaltitude(){
 			base_dmg=2.2;	
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0)dispel_buff(enemy);
+			if(pos[enemy].hp>0)int temp=dispel_buff(enemy);
 			}pos[turn].base_stat.atk++;
 	}
 }

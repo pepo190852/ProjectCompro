@@ -40,10 +40,10 @@ void gladiusslash(){
 legion.skill[1].name="Clear the path";
 legion.skill[1].type='s';
 legion.skill[1].cd=0;
-legion.skill[1].bcd=3;
-legion.skill[1].des="Deal dmg to an enemy. Dispel all Buffs from them and Legion gain Protect for 1 turn.";
+legion.skill[1].bcd=4;
+legion.skill[1].des="Deal dmg to an enemy. Dispel all Buffs from them and Legion gain Protect for 1 turn. Other Roman allies gain 50% turn meter.";
 void clearthepath(){
-	base_dmg=2.4;
+	base_dmg=2.0;
 	system("CLS");
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
@@ -56,6 +56,9 @@ void clearthepath(){
 				int temp=dispel_buff(enemy);
 			}
 		}gain(turn,"Protect",1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&find_tag(i,"Roman")&&i!=turn)gain_turn_meter(i,50);
+		}
 	}
 }
 champions.push_back(legion);
