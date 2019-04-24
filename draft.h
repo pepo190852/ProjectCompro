@@ -1,31 +1,11 @@
-#include "form.h"
-#include "spartan.h"
-#include "samurai.h"
-#include "berserker.h"
-#include "jaguar.h"
-#include "crusader.h"
-#include "khopesh.h"
-#include "legion.h"
-#include "ninja.h"
-#include "monk.h"
-#include "shaman.h"
-#include "priest.h"
-#include "impi.h"
-#include "prophet.h"
-#include "eagle.h"
-#include "puma.h"
-#include "gladiator.h"
-#include "hoplite.h"
-#include "hypaspist.h"
-#include "zande.h"
-#include "immortal.h"*/
+#include "Champion.h"
 //include more champion header
 champion upload(int i){
 	return champions[i];
 }
 void use_skill(int id,int skill_num){
-	if(id==0)spartan(skill_num);
-	else if(id==1)samurai(skill_num);
+	if(id==0)spartan_skill(skill_num);
+	else if(id==1)samurai_skill(skill_num);
 	else if(id==2)samurai(skill_num);
 	else if(id==3)samurai(skill_num);
 	else if(id==4)samurai(skill_num);
@@ -45,38 +25,7 @@ void use_skill(int id,int skill_num){
 	else if(id==18)samurai(skill_num);
 	else if(id==19)samurai(skill_num);
 }
-void update_stat(){
-	double multiplier,hp_percent,pre_max_hp;
-	for(int i=0;i<10;i++){
-		pre_max_hp=pos[i].current_stat.max_hp;
-		hp_percent=pos[i].hp*100/pos[i].current_stat.max_hp;
-		hp_percent/=100;
-		multiplier=1;
-		if(pos[i].hp_up>0)multiplier+=0.25;
-		if(pos[i].hp_down>0)multiplier*=0.8;
-		pos[i].current_stat.max_hp=pos[i].base_stat.max_hp*multiplier;
-		int dif=pos[i].current_stat.max_hp-pre_max_hp;
-		if(dif!=0){
-			pos[i].hp+=dif*hp_percent;
-		}
-		if(pos[i].current_stat.max_hp!=pre_max_hp)pos[i].hp=(hp*());
-		multiplier=1;
-		if(pos[i].atk_up>0)multiplier+=0.25;
-		if(pos[i].atk_down>0)multiplier*=0.8;
-		pos[i].current_stat.atk=pos[i].base_stat.atk*multiplier;
-		multiplier=1;
-		if(pos[i].def_up>0)multiplier+=0.25;
-		if(pos[i].def_down>0)multiplier*=0.8;
-		pos[i].current_stat.def=pos[i].base_stat.def*multiplier;
-		multiplier=1;
-		if(pos[i].spd_up>0)multiplier+=0.25;
-		if(pos[i].spd_down>0)multiplier*=0.8;
-		pos[i].current_stat.spd=pos[i].base_stat.spd*multiplier;
-		if(pos[i].protect>0)pos[i].prior=2;
-		else if(pos[i].stealth>0)pos[i].prior=0;
-		else pos[i].prior=1;
-	}
-}
+
 int cal_turn_meter(){
 	while(true){
 		for(int i=0;i<10;i++){

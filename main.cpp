@@ -1,6 +1,4 @@
 #include<windows.h>
-#include "form.h"
-#include "skill_function.h"
 #include "draft.h"
 using namespace std;
 int main(){

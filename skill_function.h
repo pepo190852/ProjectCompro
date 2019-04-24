@@ -1,4 +1,3 @@
-#include "form.h"
 int targetenemy(string name,string des){
 	char key[10]={'i','q','w','o','p','e','a','k','l','s'},p='p';
 	while(p=='p'){
@@ -29,7 +28,7 @@ int targetenemy(string name,string des){
 }
 void skill_use(int num){
 	skill_used=true;
-	cout<<pos[turn].name<<" uses "<<pos[turn].skill[num]<<"!\n";
+	cout<<pos[turn].name<<" uses "<<pos[turn].skill[num].name<<"!\n";
 	if(num==1)pos[turn].skill[num].cd=pos[turn].skill[num].bcd;
 }
 bool hit(){
@@ -54,6 +53,31 @@ void block(){
 		cout<<pos[enemy].name<<" Block!\n";
 	}
 }
+void defeat(int target){
+	pos[target].prior=1;
+	pos[target].tm=0;
+	pos[target].hp_up=0;
+	pos[target].hp_down=0;
+	pos[target].atk_up=0;
+	pos[target].atk_down=0;
+	pos[target].def_up=0;
+	pos[target].def_down=0;
+	pos[target].spd_up=0;
+	pos[target].spd_down=0;
+	pos[target].protect=0;
+	pos[target].stealth=0;
+	pos[target].hp=0;
+	pos[target].block=false;
+	pos[target].evade=false;
+	pos[target].blind=false;
+	pos[target].stun=false;
+	pos[target].silenced=0;
+	pos[target].heal_block=0;
+	pos[target].knock=0;
+	pos[target].bleed.clear();
+	pos[target].regeneration.clear();
+	cout<<pos[target].name<<" is defeated!\n";
+}
 void deal_dmg(double base,int armor){
 	int dmg;
 	double multiplier,num=20;
@@ -67,8 +91,39 @@ void deal_dmg(double base,int armor){
 	}
 	pos[enemy].hp-=dmg;
 	if(pos[enemy].hp<0)pos[enemy].hp=0;
-	cout<<pos[enemy].name<<" takes "<<dmg<<" damage!\n"<<pos[enemy].name<<"'s HP : "<<pos[enemy].hp<<"/"pos[enemy].current_stat.max_hp<<"\n";
+	cout<<pos[enemy].name<<" takes "<<dmg<<" damage!\n"<<pos[enemy].name<<"'s HP : "<<pos[enemy].hp<<"/"<<pos[enemy].current_stat.max_hp<<"\n";
 	if(pos[enemy].hp==0)defeat(enemy);
+}
+void update_stat(){
+	double multiplier,hp_percent,pre_max_hp;
+	for(int i=0;i<10;i++){
+		pre_max_hp=pos[i].current_stat.max_hp;
+		hp_percent=pos[i].hp*100/pos[i].current_stat.max_hp;
+		hp_percent/=100;
+		multiplier=1;
+		if(pos[i].hp_up>0)multiplier+=0.25;
+		if(pos[i].hp_down>0)multiplier*=0.8;
+		pos[i].current_stat.max_hp=pos[i].base_stat.max_hp*multiplier;
+		int dif=pos[i].current_stat.max_hp-pre_max_hp;
+		if(dif!=0){
+			pos[i].hp+=dif*hp_percent;
+		}
+		multiplier=1;
+		if(pos[i].atk_up>0)multiplier+=0.25;
+		if(pos[i].atk_down>0)multiplier*=0.8;
+		pos[i].current_stat.atk=pos[i].base_stat.atk*multiplier;
+		multiplier=1;
+		if(pos[i].def_up>0)multiplier+=0.25;
+		if(pos[i].def_down>0)multiplier*=0.8;
+		pos[i].current_stat.def=pos[i].base_stat.def*multiplier;
+		multiplier=1;
+		if(pos[i].spd_up>0)multiplier+=0.25;
+		if(pos[i].spd_down>0)multiplier*=0.8;
+		pos[i].current_stat.spd=pos[i].base_stat.spd*multiplier;
+		if(pos[i].protect>0)pos[i].prior=2;
+		else if(pos[i].stealth>0)pos[i].prior=0;
+		else pos[i].prior=1;
+	}
 }
 void gain(int target,string x,int dur){
 	int temp=dur;
@@ -120,32 +175,32 @@ else cout<<"no match for gain string!!!\nplease report this to dev";
 	cout<<"!\n";
 	update_stat();
 }
-int dispel_buff(int taret){
-	cout<<pos[taret].name<<" loses all Buffs!\n";
+int dispel_buff(int target){
+	cout<<pos[target].name<<" loses all Buffs!\n";
 	int count=0;
-	if(pos[taret].atk_up>0){
-		pos[taret].atk_up=0;
+	if(pos[target].atk_up>0){
+		pos[target].atk_up=0;
 		count++;
-	}if(pos[taret].def_up>0){
-		pos[taret].def_up=0;
+	}if(pos[target].def_up>0){
+		pos[target].def_up=0;
 		count++;
-	}if(pos[taret].hp_up>0){
-		pos[taret].hp_up=0;
+	}if(pos[target].hp_up>0){
+		pos[target].hp_up=0;
 		count++;
-	}if(pos[taret].block){
-		pos[taret].block=false;
+	}if(pos[target].block){
+		pos[target].block=false;
 		count++;
-	}if(pos[taret].spd_up>0){
-		pos[taret].spd_up=0;
+	}if(pos[target].spd_up>0){
+		pos[target].spd_up=0;
 		count++;
-	}if(pos[taret].protect>0){
-		pos[taret].protect=0;
+	}if(pos[target].protect>0){
+		pos[target].protect=0;
 		count++;
-	}if(pos[taret].stealth>0){
-		pos[taret].stealth=0;
+	}if(pos[target].stealth>0){
+		pos[target].stealth=0;
 		count++;
-	}if(pos[taret].evade){
-		pos[taret].evade=false;
+	}if(pos[target].evade){
+		pos[target].evade=false;
 		count++;
 	}count+=pos[target].regeneration.size();
 	pos[target].regeneration.clear();
@@ -153,34 +208,34 @@ int dispel_buff(int taret){
 	return count;
 }
 int dispel_debuff(int target){
-	cout<<pos[taret].name<<" loses all Debuffs!\n";
+	cout<<pos[target].name<<" loses all Debuffs!\n";
 	int count=0;
-	if(pos[taret].atk_down>0){
-		pos[taret].atk_down=0;
+	if(pos[target].atk_down>0){
+		pos[target].atk_down=0;
 		count++;
-	}if(pos[taret].def_down>0){
-		pos[taret].def_down=0;
+	}if(pos[target].def_down>0){
+		pos[target].def_down=0;
 		count++;
-	}if(pos[taret].hp_down>0){
-		pos[taret].hp_down=0;
+	}if(pos[target].hp_down>0){
+		pos[target].hp_down=0;
 		count++;
-	}if(pos[taret].blind){
-		pos[taret].block=false;
+	}if(pos[target].blind){
+		pos[target].block=false;
 		count++;
-	}if(pos[taret].spd_down>0){
-		pos[taret].spd_down=0;
+	}if(pos[target].spd_down>0){
+		pos[target].spd_down=0;
 		count++;
-	}if(pos[taret].silenced>0){
-		pos[taret].silenced=0;
+	}if(pos[target].silenced>0){
+		pos[target].silenced=0;
 		count++;
-	}if(pos[taret].heal_block>0){
-		pos[taret].heal_block=0;
+	}if(pos[target].heal_block>0){
+		pos[target].heal_block=0;
 		count++;
-	}if(pos[taret].knock>0){
-		pos[taret].knock=0;
+	}if(pos[target].knock>0){
+		pos[target].knock=0;
 		count++;
-	}if(pos[taret].stun){
-		pos[taret].stun=false;
+	}if(pos[target].stun){
+		pos[target].stun=false;
 		count++;
 	}
 	count+=pos[target].bleed.size();
@@ -207,7 +262,7 @@ void gain_turn_meter(int target,int gain){
 	else cout<<pos[target].name<<" cannot gain bonus turn meter due to being Knocked("<<pos[target].knock<<")!\n";
 }
 void remove_turn_meter(int target,int remove){
-	pos[target].tm-=gain;
+	pos[target].tm-=remove;
 	if(pos[target].tm<0)pos[target].tm=0;
 	cout<<pos[target].name<<" loses -"<<remove<<"% turn meter!\n";
 }
@@ -251,31 +306,7 @@ bool find_tag(int target,string x){
 	}
 	return false;
 }
-void defeat(int target){
-	pos[target].prior=1
-	pos[target].tm=0;
-	pos[target].hp_up=0;
-	pos[target].hp_down=0;
-	pos[target].atk_up=0;
-	pos[target].atk_down=0;
-	pos[target].def_up=0;
-	pos[target].def_down=0;
-	pos[target].spd_up=0;
-	pos[target].spd_down=0;
-	pos[target].protect=0;
-	pos[target].stealth=0;
-	pos[target].hp=0;
-	pos[target].block=false;
-	pos[target].evade=false;
-	pos[target].blind=false;
-	pos[target].stun=false;
-	pos[target].silenced=0;
-	pos[target].heal_block=0;
-	pos[target].knock=0;
-	pos[target].bleed.clear();
-	pos[target].regeneration.clear();
-	cout<<pos[target].name<<" is defeated!\n";
-}
+
 void revive(int target,int hp){
 	pos[target].hp=hp;
 	cout<<pos[target].name<<" is revived! HP : "<<pos[target].hp<<"/"<<pos[target].current_stat.max_hp<<"\n";
