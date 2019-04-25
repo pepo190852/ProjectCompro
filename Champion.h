@@ -1,46 +1,49 @@
-#include "form.h"
 #include "skill_function.h"
-
-
+using namespace std;
+champion spartan;
 champion samurai;
-
 champion berserker;
-
 champion jaguar;
-
 champion crusader;
-
 champion khopesh;
-
 champion legion;
-
 champion ninja;
-
 champion monk;
-
 champion shaman;
-
 champion priest;
-
 champion impi;
-
 champion prophet;
-
 champion eagle;
-
 champion puma;
-
 champion gladiator;
-
 champion hoplite;
-
 champion hypaspist;
-
 champion zande;
-
 champion immortal;
+void declare(){
+spartan.name="Spartan";
+spartan.role="Tank";
+spartan.id=0;
+spartan.hp=167;
+spartan.atk=15;
+spartan.def=16;
+spartan.spd=13;
+spartan.tag.push_back("Greek");
+spartan.tag.push_back("Classical");
+spartan.tag.push_back("Mediterranean");
+spartan.tag.push_back("Bronze");
+spartan.skill[0].name="Spartar Slash";
+spartan.skill[0].type='b';
+spartan.skill[0].cd=-1;
+spartan.skill[0].bcd=-1;
+spartan.skill[0].des="Deal dmg to an enemy. Spartan has 50% chance to gain Block.";
+spartan.skill[1].name="Shield Bash";
+spartan.skill[1].type='s';
+spartan.skill[1].cd=0;
+spartan.skill[1].bcd=2;
+spartan.skill[1].des="Deal dmg to an enemy. If Spartan has Block and this skill hits the enemy, Stun the enemy if they aren't already had Stun, then Spartan loses Block.";
+champions.push_back(spartan);
 
-declare(){
 samurai.name="Samurai";
 samurai.role="Attacker";
 samurai.id=1;
@@ -329,8 +332,7 @@ eagle.skill[0].name="Obsidian Lance";
 eagle.skill[0].type='b';
 eagle.skill[0].cd=-1;
 eagle.skill[0].bcd=-1;
-eagle.skill[0].des="Deal dmg to an enemy. This attack has 25% defense penetration which is doubled agains enemies without Stealth.";
-eagle.skill[1].name="Guardian Eagle";
+eagle.skill[0].des="Deal dmg to an enemy. This attack has 25% defense penetration which is doubled agains enemies without Stealth.";eagle.skill[1].name="Guardian Eagle";
 eagle.skill[1].type='s';
 eagle.skill[1].cd=0;
 eagle.skill[1].bcd=4;
@@ -370,8 +372,7 @@ gladiator.spd=14;
 gladiator.tag.push_back("Roman");
 gladiator.tag.push_back("Mediterranean");
 gladiator.tag.push_back("Iron");
-gladiator.tag.push_back("Classical");
-gladiator.skill[0].name="Trident Attack";
+gladiator.tag.push_back("Classical");gladiator.skill[0].name="Trident Attack";
 gladiator.skill[0].type='b';
 gladiator.skill[0].cd=-1;
 gladiator.skill[0].bcd=-1;
@@ -474,18 +475,49 @@ immortal.skill[1].des="Remove Heal Block from Immortal if there is. Recovers 25%
 champions.push_back(immortal);
 }
 
-void samurai_skill(int skill_num) {
-	if(skill_num==1)katanadraw();
-	else kamikaze();
-}
-
-void katanadraw() {
-	base_dmg=1.8;
+void spartarslash(){
+	base_dmg=1.6;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
+			block();
+			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+		}
+		if(rand()%2>0)gain(turn,"Block",-1);
+	}
+}
+void shieldbash(){
+	base_dmg=2.4;
+	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(1);
+		if(hit()){
+			block();
+			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			if(!pos[enemy].stun&&pos[turn].block==true&&pos[enemy].hp>0){
+				pos[turn].block=false;
+				cout<<pos[turn].name<<" loses Block!\n";
+				stun(enemy);
+			}
+		}
+	}
+}
+void spartan_skill(int skill_num){
+	if(skill_num==1)spartarslash();
+	else shieldbash();
+}
+
+
+void katanadraw(){
+	base_dmg=1.8;
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+		if(hit()){
 			double hp_lost_percent;
 			hp_lost_percent=pos[turn].current_stat.max_hp-pos[turn].hp;
 			hp_lost_percent=(hp_lost_percent*100)/pos[turn].current_stat.max_hp;
@@ -496,44 +528,43 @@ void katanadraw() {
 		}
 	}
 }
-
-void kamikaze() {
+void kamikaze(){
 	base_dmg=4.4;
 	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
-		if(hit()) {
+		if(hit()){
 			block();
-			int dmg;
-			double multiplier,num=20;
-			multiplier=num/(pos[turn].current_stat.def+num);
-			dmg=0.88*pos[turn].current_stat.atk*multiplier;
-			int unstable=dmg/10;
-			if(unstable>0) {
-				unstable=(rand()%((unstable*2)+1))-unstable;
-				dmg+=unstable;
-			}
-			pos[turn].hp-=dmg;
-			if(pos[turn].hp<=0)pos[enemy].hp=1;
-			cout<<pos[turn].name<<" takes "<<dmg<<" damage! HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+	int dmg;
+	double multiplier,num=20;
+	multiplier=num/(pos[turn].current_stat.def+num);
+	dmg=0.88*pos[turn].current_stat.atk*multiplier;
+	int unstable=dmg/10;
+	if(unstable>0){
+		unstable=(rand()%((unstable*2)+1))-unstable;
+	dmg+=unstable;
+	}
+	pos[turn].hp-=dmg;
+	if(pos[turn].hp<=0)pos[enemy].hp=1;
+	cout<<pos[turn].name<<" takes "<<dmg<<" damage! HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 		}
 	}
 }
-
-void berserker_skill(int skill_num) {
-	if(skill_num==1)furyswipe();
-	else enrage();
+void samurai_skill(int skill_num){
+	if(skill_num==1)katanadraw();
+	else kamikaze();
 }
 
-void furyswipe() {
+
+void furyswipe(){
 	base_dmg=1.8;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			double multiplier;
 			multiplier=(pos[enemy].hp*100)/pos[enemy].current_stat.max_hp;
 			multiplier/=200;
@@ -544,7 +575,7 @@ void furyswipe() {
 	}
 }
 
-void enrage() {
+void enrage(){
 	system("CLS");
 	skill_use(1);
 	heal(turn,pos[turn].current_stat.max_hp*0.15);
@@ -552,19 +583,19 @@ void enrage() {
 	gain(turn,"Attack Up",1);
 	gain(turn,"Speed Up",1);
 }
-
-void jaguar_skill(int skill_num) {
-	if(skill_num==1)macuahuitlsmash();
-	else predatorsense();
+void berserker_skill(int skill_num){
+	if(skill_num==1)furyswipe();
+	else enrage();
 }
 
-void macuahuitlsmash() {
+
+void macuahuitlsmash(){
 	base_dmg=1.2;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(pos[enemy].hp>0)inflict_bleed(enemy,3);
@@ -572,92 +603,89 @@ void macuahuitlsmash() {
 		}
 	}
 }
-
-void predatorsense() {
+void predatorsense(){
 	system("CLS");
 	skill_use(1);
 	pos[turn].base_stat.atk++;
 	pos[turn].base_stat.spd++;
 	gain(turn,"Stealth",2);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player!=pos[turn].player&&pos[i].stealth>0&&pos[i].hp>0) {
+	for(int i=0;i<10;i++){
+		if(pos[i].player!=pos[turn].player&&pos[i].stealth>0&&pos[i].hp>0){
 			pos[i].stealth=0;
 			cout<<pos[i].name<<" loses Stealth!\n";
 		}
 	}
 }
-
-void crusader_skill(int skill_num) {
-	if(skill_num==1)pilgrimslash();
-	else faithfulpraying();
+void jaguar_skill(int skill_num){
+	if(skill_num==1)macuahuitlsmash();
+	else predatorsense();
 }
 
-void pilgrimslash() {
+
+void pilgrimslash(){
 	base_dmg=1.8;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			if(find_tag(enemy,"Middle-Eastern"))base_dmg*=1.25;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0&&)gain(enemy,"Attack Down",1);
+			if(pos[enemy].hp>0)gain(enemy,"Attack Down",1);
 		}
 	}
 }
-
-void faithfulpraying() {
+void faithfulpraying(){
 	system("CLS");
 	skill_use(1);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&pos[i].hp>0) {
+	for(int i=0;i<10;i++){
+		if(pos[i].player==pos[turn].player&&pos[i].hp>0){
 			int temp=dispel_debuff(i);
 			heal(i,pos[i].current_stat.max_hp/4);
 		}
 	}
 }
-
-void khopesh_skill(int skill_num) {
-	if(skill_num==1)scythecleave();
-	else rejuvenate();
+void crusader_skill(int skill_num){
+	if(skill_num==1)pilgrimslash();
+	else faithfulpraying();
 }
 
-void scythecleave() {
+
+void scythecleave(){
 	base_dmg=1.4;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			if(pos[enemy].hp<pos[enemy].current_stat.max_hp/2)base_dmg*=2;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 		}
 	}
 }
-
-void rejuvenate() {
+void rejuvenate(){
 	system("CLS");
 	skill_use(1);
 	heal(turn,pos[turn].current_stat.max_hp);
 	gain_turn_meter(turn,50);
 	gain(turn,"Attack Up",1);
 }
-
-void legion_skill(int skill_num) {
-	if(skill_num==1)gladiusslash();
-	else clearthepath();
+void khopesh_skill(int skill_num){
+	if(skill_num==1)scythecleave();
+	else rejuvenate();
 }
 
-void gladiusslash() {
+
+void gladiusslash(){
 	base_dmg=1.4;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
-			for(int i=0; i<10; i++) {
+		if(hit()){
+			for(int i=0;i<10;i++){
 				if(pos[i].player!=pos[turn].player&&pos[i].hp==0)base_dmg+=0.35;
 			}
 			block();
@@ -665,266 +693,254 @@ void gladiusslash() {
 		}
 	}
 }
-
-void clearthepath() {
+void clearthepath(){
 	base_dmg=2.0;
 	system("CLS");
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
-		if(hit()) {
+		if(hit()){
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0) {
+			if(pos[enemy].hp>0){
 				int temp=dispel_buff(enemy);
 			}
-		}
-		gain(turn,"Protect",1);
-		for(int i=0; i<10; i++) {
+		}gain(turn,"Protect",1);
+		for(int i=0;i<10;i++){
 			if(pos[i].player==pos[turn].player&&find_tag(i,"Roman")&&i!=turn)gain_turn_meter(i,50);
 		}
 	}
 }
-
-void ninja_skill(int skill_num) {
-	if(skill_num==1)shuriken();
-	else blackegg();
+void legion_skill(int skill_num){
+	if(skill_num==1)gladiusslash();
+	else clearthepath();
 }
 
-void shuriken() {
+
+void shuriken(){
 	base_dmg=1.4;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			if(!pos[enemy].block)base_dmg*=2;
 			else block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 		}
 	}
 }
-
-void blackegg() {
+void blackegg(){
 	bool another_ally=false;
 	system("CLS");
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
-		if(hit()) {
+		if(hit()){
 			gain(enemy,"Blind",-1);
-		}
-		for(int i=0; i<10; i++) {
-			if(pos[i].player==pos[turn].player&&i!=turn&&pos[i].hp>0) {
+		}for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&i!=turn&&pos[i].hp>0){
 				another_ally=true;
 				break;
 			}
-		}
-		if(another_ally)gain(turn,"Stealth",2);
-		else {
+		}if(another_ally)gain(turn,"Stealth",2);
+		else{
 			gain(turn,"Evade",-1);
 			gain_turn_meter(turn,50);
 		}
 	}
 }
-
-void monk_skill(int skill_num) {
-	if(skill_num==1)staffslam();
-	else enlighten();
+void ninja_skill(int skill_num){
+	if(skill_num==1)shuriken();
+	else blackegg();
 }
 
-void staffslam() {
+
+void staffslam(){
 	base_dmg=1;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
 		block();
 		deal_dmg(base_dmg,pos[enemy].current_stat.def);
-		if(pos[enemy].hp>0) {
+		if(pos[enemy].hp>0){
 			if(rand()%2==1)stun(enemy);
 		}
 	}
 }
-
-void enlighten() {
+void enlighten(){
 	system("CLS");
-	skill_use(1);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&pos[i].blind&&pos[i].hp>0) {
-			pos[i].blind=false;
-			cout<<pos[i].name<<" loses Blind!\n";
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].blind&&pos[i].hp>0){
+				pos[i].blind=false;
+				cout<<pos[i].name<<" loses Blind!\n";
+			}
 		}
-	}
-	for(int i=0; i<10; i++) {
-		if(pos[i].player!=pos[turn].player&&pos[i].evade&&pos[i].hp>0) {
-			pos[i].evade=false;
-			cout<<pos[i].name<<" loses Evade!\n";
+		for(int i=0;i<10;i++){
+			if(pos[i].player!=pos[turn].player&&pos[i].evade&&pos[i].hp>0){
+				pos[i].evade=false;
+				cout<<pos[i].name<<" loses Evade!\n";
+			}
 		}
-	}
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&pos[i].hp>0) {
-			gain_turn_meter(i,50);
-			gain(i,"Attack Up",1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
+				gain_turn_meter(i,50);
+				gain(i,"Attack Up",1);
+			}
 		}
-	}
+}
+void monk_skill(int skill_num){
+	if(skill_num==1)staffslam();
+	else enlighten();
 }
 
-void shaman_skill(int skill_num) {
-	if(skill_num==1)spiritualassault();
-	else hallucination();
-}
 
-void spiritualassault() {
+void spiritualassault(){
 	base_dmg=1.2;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 		}
-		for(int i=0; i<10; i++) {
-			if(pos[i].player!=pos[turn].player&&pos[i].hp>0) {
+		for(int i=0;i<10;i++){
+			if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
 				remove_turn_meter(i,10);
 			}
 		}
 	}
 }
-
-void hallucination() {
+void hallucination(){
 	int total_max_hp=0,total_hp=0;
 	double percentage=0;
 	system("CLS");
-	skill_use(1);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player!=pos[turn].player&&pos[i].hp>0)gain(i,"Blind",-1);
-	}
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&pos[i].hp>0) {
-			total_max_hp+=pos[i].current_stat.max_hp;
-			total_hp+=pos[i].hp;
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player!=pos[turn].player&&pos[i].hp>0)gain(i,"Blind",-1);
 		}
-	}
-	percentage=(total_hp*100)/total_max_hp;
-	percentage/=100;
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&pos[i].hp>0) {
-			pos[i].hp=pos[i].current_stat.max_hp*percentage;
-			cout<<pos[i].name<<"'s HP set to"<<pos[i].hp<<"!\n";
-			heal(i,pos[i].current_stat/4);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
+				total_max_hp+=pos[i].current_stat.max_hp;
+				total_hp+=pos[i].hp;
+			}
 		}
-	}
+		percentage=(total_hp*100)/total_max_hp;
+		percentage/=100;
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
+				pos[i].hp=pos[i].current_stat.max_hp*percentage;
+				cout<<pos[i].name<<"'s HP set to"<<pos[i].hp<<"!\n";
+				heal(i,pos[i].current_stat.max_hp/4);
+			}
+		}
+}
+void shaman_skill(int skill_num){
+	if(skill_num==1)spiritualassault();
+	else hallucination();
 }
 
 
-void priest_skill(int skill_num) {
-	if(skill_num==1)cursedstaff();
-	else shallowtomb();
-}
-
-void cursedstaff() {
+void cursedstaff(){
 	base_dmg=1.6;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0) {
+			if(pos[enemy].hp>0){
 				if(rand()%2==1)dispel_buff(enemy);
 			}
 		}
 	}
 }
-
-void shallowtomb() {
+void shallowtomb(){
 	vector<int> revive_position;
 	int r=0;
 	system("CLS");
-	skill_use(1);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&pos[i].hp==0) {
-			if(find_tag(i,"Mesopotamian"))revive_position.push_back(i);
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].hp==0){
+				if(find_tag(i,"Mesopotamian"))revive_position.push_back(i);
+			}
+		}if(revive_position.size()==0){
+			for(int i=0;i<10;i++){
+				if(pos[i].player==pos[turn].player&&pos[i].hp==0)revive_position.push_back(i);
+			}
+			r=revive_position[rand()%revive_position.size()];
+			revive(r,pos[r].current_stat.max_hp/4);
+		}else{
+			r=revive_position[rand()%revive_position.size()];
+			revive(r,pos[r].current_stat.max_hp/2);
+			gain_turn_meter(r,100);
 		}
-	}
-	if(revive_position.size()==0) {
-		for(int i=0; i<10; i++) {
-			if(pos[i].player==pos[turn].player&&pos[i].hp==0)revive_position.push_back(i);
-		}
-		r=revive_position[rand()%revive_position.size()];
-		revive(r,pos[r].current_stat.max_hp/4);
-	} else {
-		r=revive_position[rand()%revive_position.size()];
-		revive(r,pos[r].current_stat.max_hp/2);
-		gain_turn_meter(r,100);
-	}
+}
+void priest_skill(int skill_num){
+	if(skill_num==1)cursedstaff();
+	else shallowtomb();
 }
 
-void impi_skill(int skill_num) {
-	if(skill_num==1)iklwa();
-	else combatreflexes();
-}
 
-void iklwa() {
+void iklwa(){
 	base_dmg=1.6;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].block&&pos[enemy].hp>0) {
+			if(pos[enemy].block&&pos[enemy].hp>0){
 				pos[enemy].block=false;
 				cout<<pos[enemy].name<<" loses Block!\n";
 			}
 		}
 	}
 }
-
-void combatreflexes() {
+void combatreflexes(){
 	system("CLS");
-	skill_use(1);
-	gain_turn_meter(turn,100);
-	gain(turn,"Attack Up",1);
+		skill_use(1);
+		gain_turn_meter(turn,100);
+		gain(turn,"Attack Up",1);
+}
+void impi_skill(int skill_num){
+	if(skill_num==1)iklwa();
+	else combatreflexes();
 }
 
-void prophet_skill(int skill_num) {
-	if(skill_num==1)baktunshiftingstrike();
-	else celestialapocalypse();
-}
 
-void baktunshiftingstrike() {
+void baktunshiftingstrike(){
 	base_dmg=1.2;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-		}
-		for(int i=0; i<10; i++) {
-			if(pos[i].player==pos[turn].player&&pos[i].hp>0) {
-				if(i==turn) {
+		}for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
+				if(i==turn){
 					if(pos[i].skill[1].cd>0)pos[i].skill[1].cd--;
 					cout<<pos[i].name<<"'s cooldown reduced by 1!\n";
-				} else {
-					if(rand()%2==1) {
+				}else{
+					if(rand()%2==1){
 						if(pos[i].skill[1].cd>0)pos[i].skill[1].cd--;
 						cout<<pos[i].name<<"'s cooldown reduced by 1!\n";
 					}
 				}
-			} else if(pos[i].player!=pos[turn].player&&pos[i].hp>0) {
-				if(i==enemy) {
+			}else if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
+				if(i==enemy){
 					pos[i].skill[1].cd++;
 					cout<<pos[i].name<<"'s cooldown increased by 1!\n";
-				} else {
-					if(rand()%2==1) {
+				}else{
+					if(rand()%2==1){
 						pos[i].skill[1].cd++;
 						cout<<pos[i].name<<"'s cooldown increased by 1!\n";
 					}
@@ -933,246 +949,239 @@ void baktunshiftingstrike() {
 		}
 	}
 }
-
-void celestialapocalypse() {
+void celestialapocalypse(){
 	system("CLS");
-	skill_use(1);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player!=pos[turn].player&&pos[i].hp>0) {
-			enemy=i;
-			base_dmg=5.2;
-			block();
-			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
+				enemy=i;
+				base_dmg=5.2;
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}
 		}
-	}
+}
+void prophet_skill(int skill_num){
+	if(skill_num==1)baktunshiftingstrike();
+	else celestialapocalypse();
 }
 
-void eagle_skill(int skill_num) {
-	if(skill_num==1)obsidianlance();
-	else guardianeagle();
-}
 
-void obsidianlance() {
+void obsidianlance(){
 	base_dmg=1.8;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
+		if(hit()){
 			block();
 			if(!pos[enemy].stealth)deal_dmg(base_dmg,pos[enemy].current_stat.def/2);
 			else deal_dmg(base_dmg,pos[enemy].current_stat.def*0.75);
 		}
 	}
 }
-
-void guardianeagle() {
+void guardianeagle(){
 	system("CLS");
-	skill_use(1);
-	pos[turn].base_stat.def++;
-	pos[turn].base_stat.max_hp+=10;
-	dispel_debuff(turn);
-	gain(turn,"Block",-1);
+		skill_use(1);
+		pos[turn].base_stat.def++;
+		pos[turn].base_stat.max_hp+=10;
+		dispel_debuff(turn);
+		gain(turn,"Block",-1);
+}
+void eagle_skill(int skill_num){
+	if(skill_num==1)obsidianlance();
+	else guardianeagle();
 }
 
-void puma_skill(int skill_num) {
+
+void grandcleave(){
+	system("CLS");
+	skill_use(0);
+	for(int i=0;i<10;i++){
+		if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
+			enemy=i;
+			if(hit()){
+			base_dmg=1.6;	
+			block();
+			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}
+		}
+	}
+}
+void risingaltitude(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(1);
+		if(hit()){
+			base_dmg=2.2;	
+			block();
+			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			if(pos[enemy].hp>0)int temp=dispel_buff(enemy);
+			}pos[turn].base_stat.atk++;
+	}
+}
+void puma_skill(int skill_num){
 	if(skill_num==1)grandcleave();
 	else risingaltitude();
 }
 
-void grandcleave() {
-	system("CLS");
-	skill_use(0);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player!=pos[turn].player&&pos[i].hp>0) {
-			enemy=i;
-			if(hit()) {
-				base_dmg=1.6;
-				block();
-				deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			}
-		}
-	}
-}
 
-void risingaltitude() {
+void tridentattack(){
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
-		system("CLS");
-		skill_use(1);
-		if(hit()) {
-			base_dmg=2.2;
-			block();
-			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0)int temp=dispel_buff(enemy);
-		}
-		pos[turn].base_stat.atk++;
-	}
-}
-
-void gladiator_skill(int skill_num) {
-	if(skill_num==1)tridentattack();
-	else quarternet();
-}
-
-void tridentattack() {
-	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		bool add=false;
 		system("CLS");
 		skill_use(0);
 		if(pos[enemy].def_down>0)add=true;
-		if(hit()) {
-			base_dmg=1.4;
+		if(hit()){
+			base_dmg=1.4;	
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(pos[enemy].hp>0)gain(enemy,"Defense Down",2);
-		}
-		if(add)gain(turn,"Attack Up",1);
+			}if(add)gain(turn,"Attack Up",1);
 	}
 }
-
-void quarternet() {
+void quarternet(){
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
-		if(hit()) {
+		if(hit()){
 			stun(enemy);
 			remove_turn_meter(enemy,100);
 			int temp=dispel_buff(enemy);
 			gain(enemy,"Knock",2);
-		}
+			}
 	}
 }
+void gladiator_skill(int skill_num){
+	if(skill_num==1)tridentattack();
+	else quarternet();
+}
 
-void hoplite_skill(int skill_num) {
+
+
+void steadythrust(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		bool add=false;
+		system("CLS");
+		skill_use(0);
+		if(hit()){
+			base_dmg=1.8;	
+			block();
+			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}if(pos[turn].block){
+				for(int i=0;i<10;i++){
+					if(pos[i].player==pos[turn].player&&pos[i].hp>0&&find_tag(i,"Greek"))heal(i,pos[i].current_stat.max_hp/20);
+				}
+			}
+	}
+}
+void phalanx(){
+		system("CLS");
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
+				gain(i,"Block",-1);
+				gain(i,"Defense Up",2);
+			}
+		}
+}
+void hoplite_skill(int skill_num){
 	if(skill_num==1)steadythrust();
 	else phalanx();
 }
 
-void steadythrust() {
+
+void dorybarrage(){
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
-		bool add=false;
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
-			base_dmg=1.8;
-			block();
-			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-		}
-		if(pos[turn].block) {
-			for(int i=0; i<10; i++) {
-				if(pos[i].player==pos[turn].player&&pos[i].hp>0&&find_tag(i,"Greek"))heal(i,pos[i].current_stat.max_hp/20);
-			}
-		}
-	}
-}
-
-void phalanx() {
-	system("CLS");
-	skill_use(1);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&pos[i].hp>0) {
-			gain(i,"Block",-1);
-			gain(i,"Defense Up",2);
-		}
-	}
-}
-
-void hypaspist_skill(int skill_num) {
-	if(skill_num==1)dorybarrage();
-	else mobilizing();
-}
-
-void dorybarrage() {
-	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
-		system("CLS");
-		skill_use(0);
-		for(int i=0; i<2; i++) {
-			if(hit()) {
-				base_dmg=1.0;
+		for(int i=0;i<2;i++){
+			if(hit()){
+				base_dmg=1.0;	
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			}
 		}
 	}
 }
-
-void mobilizing() {
-	system("CLS");
-	skill_use(1);
-	gain_turn_meter(turn,50);
-	gain(turn,"Speed Up",2);
-	for(int i=0; i<10; i++) {
-		if(pos[i].player==pos[turn].player&&i!=turn&&pos[i].hp>0) {
-			gain_turn_meter(i,25);
-			if(rand()%2==1)gain(i,"Speed Up",2);
+void mobilizing(){
+		system("CLS");
+		skill_use(1);
+		gain_turn_meter(turn,50);
+		gain(turn,"Speed Up",2);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&i!=turn&&pos[i].hp>0){
+				gain_turn_meter(i,25);
+				if(rand()%2==1)gain(i,"Speed Up",2);
+			}
 		}
-	}
+}
+void hypaspist_skill(int skill_num){
+	if(skill_num==1)dorybarrage();
+	else mobilizing();
 }
 
-void zande_skill(int skill_num) {
+
+void decapitator(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.0;	
+				block();
+				if(pos[enemy].hp<pos[enemy].current_stat.max_hp/4)deal_dmg(base_dmg,0);
+				else deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp==0)heal(turn,pos[turn].current_stat.max_hp);
+			}
+	}
+}
+void savagespirit(){
+		system("CLS");
+		skill_use(1);
+		int count=dispel_debuff(turn);
+		if(count>0){
+			gain_turn_meter(turn,20*count);
+		heal(turn,pos[turn].current_stat.max_hp*0.15*count);
+		}
+}
+void zande_skill(int skill_num){
 	if(skill_num==1)decapitator();
 	else savagespirit();
 }
 
-void decapitator() {
+
+void mortalsmack(){
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		if(hit()) {
-			base_dmg=1.0;
-			block();
-			if(pos[enemy].hp<pos[enemy].current_stat.max_hp/4)deal_dmg(base_dmg,0);
-			else deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp==0)heal(turn,pos[turn].current_stat.max_hp);
-		}
+			if(hit()){
+				base_dmg=1.8;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp>0)gain(enemy,"Heal Block",1);
+			}
 	}
 }
-
-void savagespirit() {
-	system("CLS");
-	skill_use(1);
-	int count=dispel_debuff(turn);
-	if(count>0) {
-		gain_turn_meter(turn,20*count);
-		heal(turn,pos[turn].current_stat.max_hp*0.15*count);
-	}
+void immortalize(){
+		system("CLS");
+		skill_use(1);
+		if(pos[turn].heal_block>0){
+			pos[turn].heal_block=0;
+			cout<<pos[turn].name<<" loses Heal Block!\n";
+		}int lost_hp=pos[turn].current_stat.max_hp-pos[turn].hp;
+		heal(turn,lost_hp/4);
+		gain(turn,"Block",-1);
+		gain(turn,"Defense Up",1);
+		gain_regeneration(turn,1);
 }
-
-void immortal_skill(int skill_num) {
+void immortal_skill(int skill_num){
 	if(skill_num==1)mortalsmack();
 	else immortalize();
-}
-
-void mortalsmack() {
-	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
-	if(enemy!=-2) {
-		system("CLS");
-		skill_use(0);
-		if(hit()) {
-			base_dmg=1.8;
-			block();
-			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0)gain(enemy,"Heal Block",1);
-		}
-	}
-}
-
-void immortalize() {
-	system("CLS");
-	skill_use(1);
-	if(pos[turn].heal_block>0) {
-		pos[turn].heal_block=0;
-		cout<<pos[turn].name<<" loses Heal Block!\n";
-	}
-	int lost_hp=pos[turn].current_stat-pos[turn].hp;
-	heal(turn,lost_hp/4);
-	gain(turn,"Block",-1);
-	gain(turn,"Defense Up",1);
-	gain_regeneration(turn,1);
 }

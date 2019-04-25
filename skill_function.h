@@ -1,8 +1,9 @@
+#include "form.h"
 int targetenemy(string name,string des){
 	char key[10]={'i','q','w','o','p','e','a','k','l','s'},p='p';
 	while(p=='p'){
 		system("CLS");
-	cout<<"Use "<<name<<" at.../n";
+	cout<<"Use "<<name<<" at..."<<"\n";
 	int prior=pos[0].prior;
 	for(int i=0;i<10;i++){
 		if(pos[i].player!=pos[turn].player){
@@ -94,11 +95,19 @@ void deal_dmg(double base,int armor){
 	cout<<pos[enemy].name<<" takes "<<dmg<<" damage!\n"<<pos[enemy].name<<"'s HP : "<<pos[enemy].hp<<"/"<<pos[enemy].current_stat.max_hp<<"\n";
 	if(pos[enemy].hp==0)defeat(enemy);
 }
+void start_stat(){
+	for(int i=0;i<10;i++){
+		pos[i].current_stat.max_hp=pos[i].base_stat.max_hp;
+		pos[i].current_stat.atk=pos[i].base_stat.atk;
+		pos[i].current_stat.def=pos[i].base_stat.def;
+		pos[i].current_stat.spd=pos[i].base_stat.spd;
+	}
+}
 void update_stat(){
 	double multiplier,hp_percent,pre_max_hp;
 	for(int i=0;i<10;i++){
 		pre_max_hp=pos[i].current_stat.max_hp;
-		hp_percent=pos[i].hp*100/pos[i].current_stat.max_hp;
+		hp_percent=(pos[i].hp*100)/pos[i].current_stat.max_hp;
 		hp_percent/=100;
 		multiplier=1;
 		if(pos[i].hp_up>0)multiplier+=0.25;
