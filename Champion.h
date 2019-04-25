@@ -110,7 +110,7 @@ jaguar.skill[1].name="Predator Sense";
 jaguar.skill[1].type='s';
 jaguar.skill[1].cd=0;
 jaguar.skill[1].bcd=4;
-jaguar.skill[1].des="Jaguar permanently gain +1 Attack and Speed. Jaguar gain Stealth for 2 turns and enemy Stealth from all enemies which can't be eveded.";
+jaguar.skill[1].des="Jaguar permanently gain +1 Attack and Speed. Jaguar gains Stealth for 2 turns and removes Stealth from all enemies which can't be evaded.";
 champions.push_back(jaguar);
 
 crusader.name="Crusader";

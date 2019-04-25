@@ -108,11 +108,10 @@ int main(){
 				i=drafting(queue[j],picked1,picked2);
 				if(i==-1){
 					p='b';
-					draftstate==-1;
+					draftstate=0;
 					break;
 				}
-				if(p!='b'){
-					view=upload(i);
+				view=upload(i);
 					 	pos[j].name=view.name;
 					 	for(int m=0;m<view.tag.size();m++)pos[j].tag.push_back(view.tag[m]);
 					 	pos[j].id=view.id;
@@ -127,8 +126,8 @@ int main(){
 						if(p=='b')break;
 					 }
 					 draftstate++;
-					 p='p';
-				}
+					 if(p!='b')p='p';
+					 
 				}
 				else if(draftstate==3){
 					start_stat();
