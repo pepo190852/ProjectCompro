@@ -80,6 +80,7 @@ void defeat(int target){
 	cout<<pos[target].name<<" is defeated!\n";
 }
 void deal_dmg(double base,int armor){
+	base*=2;
 	int dmg;
 	double multiplier,num=20;
 	multiplier=num/(armor+num);
@@ -284,6 +285,7 @@ void gain_regeneration(int target,int dur){
 	cout<<pos[target].name<<" gains Regeneration("<<dur<<")!\n";
 }
 void bleed(){
+	system("CLS");
 	int bleed_dmg=pos[turn].current_stat.max_hp*0.05;
 	if(bleed_dmg<1)bleed_dmg=1;
 	for(int i=0;i<pos[turn].bleed.size();i++){
@@ -291,18 +293,44 @@ void bleed(){
 		if(pos[turn].hp<0)pos[turn].hp=0;
 		cout<<bleed_dmg<<" bleed damage!\n";
 	}
+	if(pos[turn].bleed.size()>0){
+		cout<<pos[turn].name<<"'s HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+		if(pos[turn].player==1){
+			cout<<"'d' to continue...\n";
+		p='z';
+		while(p!='d')p=_getch();
+		}
+		else{
+		cout<<"'k' to continue...\n";
+		p='z';
+		while(p!='k')p=_getch();
+	}
+	}
 	for(int i=0;i<pos[turn].bleed.size();i++){
 		pos[turn].bleed[i]--;
 		if(pos[turn].bleed[i]==0)pos[turn].bleed.erase(pos[turn].bleed.begin()+i);
 	}
 }
 void regeneration(){
+	system("CLS");
 	int heal_amount=pos[turn].current_stat.max_hp*0.1;
 	if(heal_amount<1)heal_amount=1;
 	for(int i=0;i<pos[turn].regeneration.size();i++){
 		pos[turn].hp+=heal_amount;
 		if(pos[turn].hp>pos[turn].current_stat.max_hp)pos[turn].hp=pos[turn].current_stat.max_hp;
 		cout<<"+"<<heal_amount<<" HP from regeneration!\n";
+	}if(pos[turn].regeneration.size()>0){
+		cout<<pos[turn].name<<"'s HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+		if(pos[turn].player==1){
+			cout<<"'d' to continue...\n";
+		p='z';
+		while(p!='d')p=_getch();
+		}
+		else{
+		cout<<"'k' to continue...\n";
+		p='z';
+		while(p!='k')p=_getch();
+	}
 	}
 	for(int i=0;i<pos[turn].regeneration.size();i++){
 		pos[turn].regeneration[i]--;

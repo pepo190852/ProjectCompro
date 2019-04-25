@@ -236,7 +236,7 @@ int start_turn(){
 void begin_turn(){
 	update_stat();
 	regeneration();
-		bleed();
+	bleed();
 }
 void endturn(){
 	if(pos[turn].atk_down>0)pos[turn].atk_down--;

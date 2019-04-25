@@ -145,6 +145,7 @@ int main(){
 						}
 						}else if(pos[turn].stun&&pos[turn].hp>0){
 							pos[turn].stun==false;
+							system("CLS");
 							cout<<pos[turn].name<<" recovered from Stun.\n";
 						}else if(pos[turn].hp==0)defeat(turn);
 						endturn();

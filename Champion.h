@@ -539,7 +539,7 @@ void kamikaze(){
 	int dmg;
 	double multiplier,num=20;
 	multiplier=num/(pos[turn].current_stat.def+num);
-	dmg=0.88*pos[turn].current_stat.atk*multiplier;
+	dmg=1.232*pos[turn].current_stat.atk*multiplier;
 	int unstable=dmg/10;
 	if(unstable>0){
 		unstable=(rand()%((unstable*2)+1))-unstable;
@@ -870,16 +870,24 @@ void shallowtomb(){
 			if(pos[i].player==pos[turn].player&&pos[i].hp==0){
 				if(find_tag(i,"Mesopotamian"))revive_position.push_back(i);
 			}
-		}if(revive_position.size()==0){
+		}cout<<"passed find defeated Mesopotamian allies state...\n";
+		if(revive_position.size()==0){
+			cout<<"No Mesopotamian allies found. Continue searching for defeated allies...\n";
 			for(int i=0;i<10;i++){
 				if(pos[i].player==pos[turn].player&&pos[i].hp==0)revive_position.push_back(i);
-			}
+			}cout<<"Passed find defeated allies state, start randomizing an ally to be revived...\n";
 			r=revive_position[rand()%revive_position.size()];
+			cout<<"Ally acquired, start reviving "<<pos[r].name<<"...\n";
 			revive(r,pos[r].current_stat.max_hp/4);
+			cout<<"Ally's revived...\n";
 		}else{
+			cout<<"Passed find defeated Mesopotamian allies state, start randomizing an ally to be revived...\n";
 			r=revive_position[rand()%revive_position.size()];
+			cout<<"Mesopotamian ally acquired, start reviving "<<pos[r].name<<"...\n";
 			revive(r,pos[r].current_stat.max_hp/2);
+			cout<<"Mesopotamian ally's revived...\n";
 			gain_turn_meter(r,100);
+			cout<<"Mesopotamian ally gain turn meter...\n";
 		}
 }
 void priest_skill(int skill_num){
