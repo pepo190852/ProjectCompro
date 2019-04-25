@@ -539,7 +539,7 @@ void kamikaze(){
 	int dmg;
 	double multiplier,num=20;
 	multiplier=num/(pos[turn].current_stat.def+num);
-	dmg=1.232*pos[turn].current_stat.atk*multiplier;
+	dmg=1.76*pos[turn].current_stat.atk*multiplier;
 	int unstable=dmg/10;
 	if(unstable>0){
 		unstable=(rand()%((unstable*2)+1))-unstable;
