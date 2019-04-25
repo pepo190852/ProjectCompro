@@ -20,6 +20,7 @@ champion hoplite;
 champion hypaspist;
 champion zande;
 champion immortal;
+champion ronin;
 void declare(){
 spartan.name="Spartan";
 spartan.role="Tank";
@@ -473,8 +474,30 @@ immortal.skill[1].cd=0;
 immortal.skill[1].bcd=2;
 immortal.skill[1].des="Remove Heal Block from Immortal if there is. Recovers 25% of lost HP. Gain Block and Defense Up for 1 turn. Also gain Regeneration for 1 turns.";
 champions.push_back(immortal);
-}
 
+ronin.name="Ronin";
+ronin.role="Tank";
+ronin.id=20;
+ronin.hp=156;
+ronin.atk=14;
+ronin.def=15;
+ronin.spd=13;
+ronin.tag.push_back("Japanese");
+ronin.tag.push_back("Asian");
+ronin.tag.push_back("Steel");
+ronin.tag.push_back("Medieval");
+ronin.skill[0].name="Naginata";
+ronin.skill[0].type='b';
+ronin.skill[0].cd=-1;
+ronin.skill[0].bcd=-1;
+ronin.skill[0].des="Deal dmg to an enemy. Applies Offense Down for 2 turns, if already has Offense Down, applies Defense Down for 2 turns.";
+ronin.skill[1].name="Intimidating";
+ronin.skill[1].type='s';
+ronin.skill[1].cd=0;
+ronin.skill[1].bcd=3;
+ronin.skill[1].des="Applies Silence to all enemies for 1 turn and remove 25% turn meter. All allies gain Health Up for 1 turn.";
+champions.push_back(ronin);
+}
 void spartarslash(){
 	base_dmg=1.6;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
@@ -872,22 +895,22 @@ void shallowtomb(){
 			}
 		}cout<<"passed find defeated Mesopotamian allies state...\n";
 		if(revive_position.size()==0){
-			cout<<"No Mesopotamian allies found. Continue searching for defeated allies...\n";
+			//cout<<"No Mesopotamian allies found. Continue searching for defeated allies...\n";
 			for(int i=0;i<10;i++){
 				if(pos[i].player==pos[turn].player&&pos[i].hp==0)revive_position.push_back(i);
-			}cout<<"Passed find defeated allies state, start randomizing an ally to be revived...\n";
-			r=revive_position[rand()%revive_position.size()];
-			cout<<"Ally acquired, start reviving "<<pos[r].name<<"...\n";
+			}//cout<<"Passed find defeated allies state, start randomizing an ally to be revived...\n";
+			if(revive_position.size()>0)r=revive_position[rand()%revive_position.size()];
+			//cout<<"Ally acquired, start reviving "<<pos[r].name<<"...\n";
 			revive(r,pos[r].current_stat.max_hp/4);
-			cout<<"Ally's revived...\n";
+			//cout<<"Ally's revived...\n";
 		}else{
-			cout<<"Passed find defeated Mesopotamian allies state, start randomizing an ally to be revived...\n";
-			r=revive_position[rand()%revive_position.size()];
-			cout<<"Mesopotamian ally acquired, start reviving "<<pos[r].name<<"...\n";
+			//cout<<"Passed find defeated Mesopotamian allies state, start randomizing an ally to be revived...\n";
+			if(revive_position.size()>0)r=revive_position[rand()%revive_position.size()];
+			//cout<<"Mesopotamian ally acquired, start reviving "<<pos[r].name<<"...\n";
 			revive(r,pos[r].current_stat.max_hp/2);
-			cout<<"Mesopotamian ally's revived...\n";
+			//cout<<"Mesopotamian ally's revived...\n";
 			gain_turn_meter(r,100);
-			cout<<"Mesopotamian ally gain turn meter...\n";
+			//cout<<"Mesopotamian ally gain turn meter...\n";
 		}
 }
 void priest_skill(int skill_num){
@@ -1192,4 +1215,40 @@ void immortalize(){
 void immortal_skill(int skill_num){
 	if(skill_num==1)mortalsmack();
 	else immortalize();
+}
+
+
+
+void naginata(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.4;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp>0){
+					if(pos[enemy].atk_down>0)gain(enemy,"Defense Down",2);
+					gain(enemy,"Attack Down",2);
+				}
+			}
+	}
+}
+void intimidating(){
+		system("CLS");
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].hp>0&&pos[i].player!=pos[turn].player){
+				gain(i,"Silence",1);
+				gain(i,"Heal Block",1);
+			}else if(pos[i].hp>0){
+				gain(i,"Health Up",1);
+				if(find_tag(i,"Japanese"))gain(i,"Defense Up",1);
+			}
+		}
+}
+void ronin_skill(int skill_num){
+	if(skill_num==1)naginata();
+	else intimidating();
 }
