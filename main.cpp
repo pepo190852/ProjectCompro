@@ -3,6 +3,7 @@
 using namespace std;
 bool ban=false,share_pool;
 int main(){
+	for(int i=0;i<10;i++)pos[i].id=-1;
 	declare();
 	bool picked1[champions.size()],picked2[champions.size()],picked[champions.size()];
 	p='a';
@@ -107,10 +108,11 @@ int main(){
 				i=drafting(queue[j],picked1,picked2);
 				if(i==-1){
 					p='b';
-					draftstate=-1;
+					draftstate==-1;
 					break;
 				}
-				view=upload(i);
+				if(p!='b'){
+					view=upload(i);
 					 	pos[j].name=view.name;
 					 	for(int m=0;m<view.tag.size();m++)pos[j].tag.push_back(view.tag[m]);
 					 	pos[j].id=view.id;
@@ -126,6 +128,7 @@ int main(){
 					 }
 					 draftstate++;
 					 p='p';
+				}
 				}
 				else if(draftstate==3){
 					start_stat();
