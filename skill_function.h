@@ -29,7 +29,7 @@ int targetenemy(string name,string des){
 }
 void skill_use(int num){
 	skill_used=true;
-	cout<<pos[turn].name<<" uses "<<pos[turn].skill[num].name<<"!\n";
+	cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" uses "<<pos[turn].skill[num].name<<"!\n";
 	if(num==1)pos[turn].skill[num].cd=pos[turn].skill[num].bcd;
 }
 bool hit(){
@@ -38,12 +38,12 @@ bool hit(){
 				return true;
 			}else if(!pos[enemy].stun){
 				pos[enemy].evade=false;
-				cout<<pos[enemy].name<<" evades!\n";
+				cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" evades!\n";
 				return false;
 			}else return true;
 		}else{
 			pos[turn].blind=false;
-			cout<<pos[turn].name<<" misses!\n";
+			cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" misses!\n";
 			return false;
 		}
 }
@@ -51,7 +51,7 @@ void block(){
 	if(pos[enemy].block&&!pos[enemy].stun){
 		pos[enemy].block=false;
 		base_dmg*=0.5;
-		cout<<pos[enemy].name<<" Block!\n";
+		cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" Block!\n";
 	}
 }
 void defeat(int target){
@@ -77,10 +77,10 @@ void defeat(int target){
 	pos[target].knock=0;
 	pos[target].bleed.clear();
 	pos[target].regeneration.clear();
-	cout<<pos[target].name<<" is defeated!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" is defeated!\n";
 }
 void deal_dmg(double base,int armor){
-	base*=2;
+	base*=1.5;
 	int dmg;
 	double multiplier,num=20;
 	multiplier=num/(armor+num);
@@ -93,7 +93,7 @@ void deal_dmg(double base,int armor){
 	}
 	pos[enemy].hp-=dmg;
 	if(pos[enemy].hp<0)pos[enemy].hp=0;
-	cout<<pos[enemy].name<<" takes "<<dmg<<" damage!\n"<<pos[enemy].name<<"'s HP : "<<pos[enemy].hp<<"/"<<pos[enemy].current_stat.max_hp<<"\n";
+	cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" takes "<<dmg<<" damage!\nPlayer "<<pos[enemy].player<<"'s "<<pos[enemy].name<<"'s HP : "<<pos[enemy].hp<<"/"<<pos[enemy].current_stat.max_hp<<"\n";
 	if(pos[enemy].hp==0)defeat(enemy);
 }
 void start_stat(){
@@ -138,7 +138,7 @@ void update_stat(){
 void gain(int target,string x,int dur){
 	int temp=dur;
 	if(target==turn)dur++;
-	cout<<pos[target].name<<" gains "<<x;
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains "<<x;
 	if(x=="Health Up"){
 		if(pos[target].hp_up<=dur)pos[target].hp_up=dur;
 		cout<<"("<<temp<<")";
@@ -186,7 +186,7 @@ else cout<<"no match for gain string!!!\nplease report this to dev";
 	update_stat();
 }
 int dispel_buff(int target){
-	cout<<pos[target].name<<" loses all Buffs!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" loses all Buffs!\n";
 	int count=0;
 	if(pos[target].atk_up>0){
 		pos[target].atk_up=0;
@@ -218,7 +218,7 @@ int dispel_buff(int target){
 	return count;
 }
 int dispel_debuff(int target){
-	cout<<pos[target].name<<" loses all Debuffs!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" loses all Debuffs!\n";
 	int count=0;
 	if(pos[target].atk_down>0){
 		pos[target].atk_down=0;
@@ -255,34 +255,34 @@ int dispel_debuff(int target){
 }
 void stun(int target){
 	pos[target].stun=true;
-	cout<<pos[target].name<<" is Stunned!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" is Stunned!\n";
 }
 void heal(int target,int heal){
 	if(pos[target].heal_block==0){
 		if(pos[target].hp+heal>pos[target].current_stat.max_hp)heal-=(pos[target].hp+heal)-pos[target].current_stat.max_hp;
 	pos[target].hp+=heal;
-	cout<<pos[target].name<<" heals for +"<<heal<<" HP! HP : "<<pos[target].hp<<"/"<<pos[target].current_stat.max_hp<<"\n";
-	}else cout<<pos[target].name<<" cannot heal due to being Heal-Blocked("<<pos[target].heal_block<<")!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" heals for +"<<heal<<" HP! HP : "<<pos[target].hp<<"/"<<pos[target].current_stat.max_hp<<"\n";
+	}else cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" cannot heal due to being Heal-Blocked("<<pos[target].heal_block<<")!\n";
 }
 void gain_turn_meter(int target,int gain){
 	if(pos[target].knock==0){
 		pos[target].tm+=gain;
-	cout<<pos[target].name<<" gains +"<<gain<<"% turn meter!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains +"<<gain<<"% turn meter!\n";
 	}
-	else cout<<pos[target].name<<" cannot gain bonus turn meter due to being Knocked("<<pos[target].knock<<")!\n";
+	else cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" cannot gain bonus turn meter due to being Knocked("<<pos[target].knock<<")!\n";
 }
 void remove_turn_meter(int target,int remove){
 	pos[target].tm-=remove;
 	if(pos[target].tm<0)pos[target].tm=0;
-	cout<<pos[target].name<<" loses -"<<remove<<"% turn meter!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" loses -"<<remove<<"% turn meter!\n";
 }
 void inflict_bleed(int target,int dur){
 	pos[target].bleed.push_back(dur);
-	cout<<pos[target].name<<" gains Bleed("<<dur<<")!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains Bleed("<<dur<<")!\n";
 }
 void gain_regeneration(int target,int dur){
 	pos[target].regeneration.push_back(dur);
-	cout<<pos[target].name<<" gains Regeneration("<<dur<<")!\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains Regeneration("<<dur<<")!\n";
 }
 void bleed(){
 	system("CLS");
@@ -294,7 +294,7 @@ void bleed(){
 		cout<<bleed_dmg<<" bleed damage!\n";
 	}
 	if(pos[turn].bleed.size()>0){
-		cout<<pos[turn].name<<"'s HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+		cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"'s HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
 		if(pos[turn].player==1){
 			cout<<"'d' to continue...\n";
 		p='z';
@@ -320,7 +320,7 @@ void regeneration(){
 		if(pos[turn].hp>pos[turn].current_stat.max_hp)pos[turn].hp=pos[turn].current_stat.max_hp;
 		cout<<"+"<<heal_amount<<" HP from regeneration!\n";
 	}if(pos[turn].regeneration.size()>0){
-		cout<<pos[turn].name<<"'s HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+		cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"'s HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
 		if(pos[turn].player==1){
 			cout<<"'d' to continue...\n";
 		p='z';
@@ -346,5 +346,5 @@ bool find_tag(int target,string x){
 
 void revive(int target,int hp){
 	pos[target].hp=hp;
-	cout<<pos[target].name<<" is revived! HP : "<<pos[target].hp<<"/"<<pos[target].current_stat.max_hp<<"\n";
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" is revived! HP : "<<pos[target].hp<<"/"<<pos[target].current_stat.max_hp<<"\n";
 }

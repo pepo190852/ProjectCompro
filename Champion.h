@@ -21,6 +21,7 @@ champion hypaspist;
 champion zande;
 champion immortal;
 champion ronin;
+champion templar;
 void declare(){
 spartan.name="Spartan";
 spartan.role="Tank";
@@ -497,6 +498,28 @@ ronin.skill[1].cd=0;
 ronin.skill[1].bcd=3;
 ronin.skill[1].des="Applies Silence to all enemies for 1 turn and remove 25% turn meter. All allies gain Health Up for 1 turn.";
 champions.push_back(ronin);
+
+templar.name="Templar";
+templar.role="Attacker";
+templar.id=21;
+templar.hp=144;
+templar.atk=16;
+templar.def=15;
+templar.spd=14;
+templar.tag.push_back("European");
+templar.tag.push_back("Steel");
+templar.tag.push_back("Medieval");
+templar.skill[0].name="Determined Slash";
+templar.skill[0].type='b';
+templar.skill[0].cd=-1;
+templar.skill[0].bcd=-1;
+templar.skill[0].des="Deal dmg to an enemy. Applies Heal Block for 2 turns. If already has Heal Block, applies Silence for 2 turns. If already has Silence, increases their cooldown by 1.";
+templar.skill[1].name="Breakthrough";
+templar.skill[1].type='s';
+templar.skill[1].cd=0;
+templar.skill[1].bcd=4;
+templar.skill[1].des="If this attack hits, it will dispel all Buffs from the enemy then deals dmg to them. If no buff, reduce Templar's cooldown by 1 and remove 100% turn meter from enemy. Dispel all Debuffs from Templar, if no debuff, gain Regeneration for 1 turn and Block.";
+champions.push_back(templar);
 }
 void spartarslash(){
 	base_dmg=1.6;
@@ -522,7 +545,7 @@ void shieldbash(){
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(!pos[enemy].stun&&pos[turn].block==true&&pos[enemy].hp>0){
 				pos[turn].block=false;
-				cout<<pos[turn].name<<" loses Block!\n";
+				cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" loses Block!\n";
 				stun(enemy);
 			}
 		}
@@ -552,7 +575,7 @@ void katanadraw(){
 	}
 }
 void kamikaze(){
-	base_dmg=4.4;
+	base_dmg=4.2;
 	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
 	if(enemy!=-2){
 		system("CLS");
@@ -562,7 +585,7 @@ void kamikaze(){
 	int dmg;
 	double multiplier,num=20;
 	multiplier=num/(pos[turn].current_stat.def+num);
-	dmg=1.76*pos[turn].current_stat.atk*multiplier;
+	dmg=1.26*pos[turn].current_stat.atk*multiplier;
 	int unstable=dmg/10;
 	if(unstable>0){
 		unstable=(rand()%((unstable*2)+1))-unstable;
@@ -570,7 +593,7 @@ void kamikaze(){
 	}
 	pos[turn].hp-=dmg;
 	if(pos[turn].hp<=0)pos[enemy].hp=1;
-	cout<<pos[turn].name<<" takes "<<dmg<<" damage! HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+	cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" takes "<<dmg<<" damage! HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 		}
 	}
@@ -597,7 +620,6 @@ void furyswipe(){
 		}
 	}
 }
-
 void enrage(){
 	system("CLS");
 	skill_use(1);
@@ -635,7 +657,7 @@ void predatorsense(){
 	for(int i=0;i<10;i++){
 		if(pos[i].player!=pos[turn].player&&pos[i].stealth>0&&pos[i].hp>0){
 			pos[i].stealth=0;
-			cout<<pos[i].name<<" loses Stealth!\n";
+			cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<" loses Stealth!\n";
 		}
 	}
 }
@@ -800,13 +822,13 @@ void enlighten(){
 		for(int i=0;i<10;i++){
 			if(pos[i].player==pos[turn].player&&pos[i].blind&&pos[i].hp>0){
 				pos[i].blind=false;
-				cout<<pos[i].name<<" loses Blind!\n";
+				cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<" loses Blind!\n";
 			}
 		}
 		for(int i=0;i<10;i++){
 			if(pos[i].player!=pos[turn].player&&pos[i].evade&&pos[i].hp>0){
 				pos[i].evade=false;
-				cout<<pos[i].name<<" loses Evade!\n";
+				cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<" loses Evade!\n";
 			}
 		}
 		for(int i=0;i<10;i++){
@@ -893,23 +915,29 @@ void shallowtomb(){
 			if(pos[i].player==pos[turn].player&&pos[i].hp==0){
 				if(find_tag(i,"Mesopotamian"))revive_position.push_back(i);
 			}
-		}cout<<"passed find defeated Mesopotamian allies state...\n";
+		}//cout<<"passed find defeated Mesopotamian allies state...\n";
 		if(revive_position.size()==0){
 			//cout<<"No Mesopotamian allies found. Continue searching for defeated allies...\n";
 			for(int i=0;i<10;i++){
 				if(pos[i].player==pos[turn].player&&pos[i].hp==0)revive_position.push_back(i);
 			}//cout<<"Passed find defeated allies state, start randomizing an ally to be revived...\n";
-			if(revive_position.size()>0)r=revive_position[rand()%revive_position.size()];
+			if(revive_position.size()>0){
+				r=revive_position[rand()%revive_position.size()];
+				revive(r,pos[r].current_stat.max_hp/4);
+			}
 			//cout<<"Ally acquired, start reviving "<<pos[r].name<<"...\n";
-			revive(r,pos[r].current_stat.max_hp/4);
 			//cout<<"Ally's revived...\n";
 		}else{
 			//cout<<"Passed find defeated Mesopotamian allies state, start randomizing an ally to be revived...\n";
-			if(revive_position.size()>0)r=revive_position[rand()%revive_position.size()];
+			if(revive_position.size()>0){
+				r=revive_position[rand()%revive_position.size()];
+				revive(r,pos[r].current_stat.max_hp/2);
+				gain_turn_meter(r,100);
+			}
 			//cout<<"Mesopotamian ally acquired, start reviving "<<pos[r].name<<"...\n";
-			revive(r,pos[r].current_stat.max_hp/2);
+			
 			//cout<<"Mesopotamian ally's revived...\n";
-			gain_turn_meter(r,100);
+			
 			//cout<<"Mesopotamian ally gain turn meter...\n";
 		}
 }
@@ -929,7 +957,7 @@ void iklwa(){
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(pos[enemy].block&&pos[enemy].hp>0){
 				pos[enemy].block=false;
-				cout<<pos[enemy].name<<" loses Block!\n";
+				cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" loses Block!\n";
 			}
 		}
 	}
@@ -1205,7 +1233,7 @@ void immortalize(){
 		skill_use(1);
 		if(pos[turn].heal_block>0){
 			pos[turn].heal_block=0;
-			cout<<pos[turn].name<<" loses Heal Block!\n";
+			cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" loses Heal Block!\n";
 		}int lost_hp=pos[turn].current_stat.max_hp-pos[turn].hp;
 		heal(turn,lost_hp/4);
 		gain(turn,"Block",-1);
@@ -1251,4 +1279,52 @@ void intimidating(){
 void ronin_skill(int skill_num){
 	if(skill_num==1)naginata();
 	else intimidating();
+}
+
+
+
+void breakthrough(){
+	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(1);
+			if(hit()){
+				base_dmg=2.8;
+				int count=dispel_buff(enemy);
+				if(count==0){
+					pos[turn].skill[1].cd--;
+					cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"'s cooldown reduced by 1!\n";
+					remove_turn_meter(enemy,100);
+				}	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+	}int temp=dispel_debuff(turn);
+	if(temp==0){
+		gain(turn,"Block",-1);
+		gain_regeneration(turn,1);
+	}
+}
+}
+void determinedslash(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.4;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp>0){
+					if(pos[enemy].silenced>0){
+						pos[enemy].skill[1].cd++;
+						cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<"'s cooldown increased by 1!\n";
+				}if(pos[enemy].heal_block>0)gain(enemy,"Silence",2);
+				gain(enemy,"Heal Block",2);
+			}
+	}
+}
+}
+void templar_skill(int skill_num){
+	if(skill_num==1)determinedslash();
+	else breakthrough();
 }

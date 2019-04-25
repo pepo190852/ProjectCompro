@@ -126,8 +126,7 @@ int main(){
 						if(p=='b')break;
 					 }
 					 draftstate++;
-					 if(p!='b')p='p';
-					 
+					 if(p!='b')p='p'; 
 				}
 				else if(draftstate==3){
 					start_stat();
@@ -157,11 +156,11 @@ int main(){
 						}
 						if(hp1==0||hp2==0)break;
 						else{
-						if(pos[turn].player==1)cout<<"'d";
+						if(pos[turn].player==1)cout<<"'f";
 						else cout<<"'j";
 						cout<<"' to continue...";
 					    if(pos[turn].player==1){
-					    	while(p!='d')p=_getch();
+					    	while(p!='f')p=_getch();
 						}else{
 							while(p!='j')p=_getch();
 						}
