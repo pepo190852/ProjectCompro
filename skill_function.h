@@ -19,7 +19,7 @@ int targetenemy(string name,string des){
 	while(p!='b'){
 		p=_getch();
 		for(int i=0;i<10;i++){
-			if(p==key[i]&&pos[i].player!=pos[turn].player&&pos[turn].prior==prior&&pos[i].hp>0){
+			if(p==key[i]&&pos[i].player!=pos[turn].player&&pos[i].prior==prior&&pos[i].hp>0){
 				return i;
 			}else if(p=='b')break;
 		}
