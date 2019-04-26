@@ -22,6 +22,11 @@ champion zande;
 champion immortal;
 champion ronin;
 champion templar;
+champion mongul;
+champion nomad;
+champion maori;
+champion rajput;
+champion pictish;
 void declare(){
 spartan.name="Spartan";
 spartan.role="Tank";
@@ -491,7 +496,7 @@ ronin.skill[0].name="Naginata";
 ronin.skill[0].type='b';
 ronin.skill[0].cd=-1;
 ronin.skill[0].bcd=-1;
-ronin.skill[0].des="Deal dmg to an enemy. Applies Offense Down for 2 turns, if already has Offense Down, applies Defense Down for 2 turns.";
+ronin.skill[0].des="Deal dmg to an enemy. Applies Attack Down for 2 turns, if already has Offense Down, applies Defense Down for 2 turns.";
 ronin.skill[1].name="Intimidating";
 ronin.skill[1].type='s';
 ronin.skill[1].cd=0;
@@ -520,6 +525,121 @@ templar.skill[1].cd=0;
 templar.skill[1].bcd=4;
 templar.skill[1].des="If this attack hits, it will dispel all Buffs from the enemy then deals dmg to them. If no buff, reduce Templar's cooldown by 1 and remove 100% turn meter from enemy. Dispel all Debuffs from Templar, if no debuff, gain Regeneration for 1 turn and Block.";
 champions.push_back(templar);
+
+mongul.name="Mongul";
+mongul.role="Tank";
+mongul.id=22;
+mongul.hp=178;
+mongul.atk=14;
+mongul.def=14;
+mongul.spd=12;
+mongul.tag.push_back("Eurasian");
+mongul.tag.push_back("Asian");
+mongul.tag.push_back("Steel");
+mongul.tag.push_back("Medieval");
+mongul.skill[0].name="Mace Smash";
+mongul.skill[0].type='b';
+mongul.skill[0].cd=-1;
+mongul.skill[0].bcd=-1;
+mongul.skill[0].des="Deal dmg to an enemy. Applies Knock for 2 turns, if already has Knock, 50% chance to Stun.";
+mongul.skill[1].name="War Cry";
+mongul.skill[1].type='s';
+mongul.skill[1].cd=0;
+mongul.skill[1].bcd=3;
+mongul.skill[1].des="Mongul gain Protect and Defense Up for 2 turns. Other allies gain Attack Up for 2 turns. Other Eurasian allies also gain 50% turn meter";
+champions.push_back(mongul);
+
+nomad.name="Nomad";
+nomad.role="Attacker";
+nomad.id=23;
+nomad.hp=133;
+nomad.atk=16;
+nomad.def=12;
+nomad.spd=14;
+nomad.tag.push_back("Eurasian");
+nomad.tag.push_back("Asian");
+nomad.tag.push_back("Steel");
+nomad.tag.push_back("Medieval");
+nomad.skill[0].name="Man Hunting";
+nomad.skill[0].type='b';
+nomad.skill[0].cd=-1;
+nomad.skill[0].bcd=-1;
+nomad.skill[0].des="Deal dmg to an enemy. If this attack defeats the enemy, all allies gain 25% turn meter.";
+nomad.skill[1].name="Nomadic Survivor";
+nomad.skill[1].type='s';
+nomad.skill[1].cd=0;
+nomad.skill[1].bcd=2;
+nomad.skill[1].des="Nomad gain Attack Up and Speed Up for 1 turns. Nomad also gain Evade.";
+champions.push_back(nomad);
+
+maori.name="Maori";
+maori.role="Attacker";
+maori.id=24;
+maori.hp=167;
+maori.atk=14;
+maori.def=12;
+maori.spd=16;
+maori.tag.push_back("Polynesian");
+maori.tag.push_back("Obsidian");
+maori.tag.push_back("Classical");
+maori.skill[0].name="Shark-Teeth";
+maori.skill[0].type='b';
+maori.skill[0].cd=-1;
+maori.skill[0].bcd=-1;
+maori.skill[0].des="Deal dmg to an enemy. If this attack defeats the enemy, Maori recovers 100% HP.";
+maori.skill[1].name="Haka";
+maori.skill[1].type='s';
+maori.skill[1].cd=0;
+maori.skill[1].bcd=6;
+maori.skill[1].des="Dispel all Buffs from all enemies and remove 50% turn meter. All allies gain Attack Up for 2 turns and all enemies gain Defense Down for 2 turns. Can't be Evaded.";
+champions.push_back(maori);
+
+rajput.name="Rajput";
+rajput.role="Attacker";
+rajput.id=25;
+rajput.hp=167;
+rajput.atk=18;
+rajput.def=15;
+rajput.spd=16;
+rajput.tag.push_back("Asian");
+rajput.tag.push_back("Indian");
+rajput.tag.push_back("Iron");
+rajput.tag.push_back("Classical");
+rajput.skill[0].name="Katar Slash";
+rajput.skill[0].type='b';
+rajput.skill[0].cd=-1;
+rajput.skill[0].bcd=-1;
+rajput.skill[0].des="Deal dmg to an enemy. Has 50% defense penetration.";
+rajput.skill[1].name="Chakram";
+rajput.skill[1].type='s';
+rajput.skill[1].cd=0;
+rajput.skill[1].bcd=4;
+rajput.skill[1].des="Deals dmg to an enemy, if this attack hits, it will continue to attack other random enemies until every enemies is hit by this attack or an enemy evades it. Won't attack enemies with Stealth.";
+champions.push_back(rajput);
+
+pictish.name="Pictish";
+pictish.role="Attacker";
+pictish.id=26;
+pictish.hp=144;
+pictish.atk=14;
+pictish.def=11;
+pictish.spd=16;
+pictish.tag.push_back("Scandinavian");
+pictish.tag.push_back("Celtic");
+pictish.tag.push_back("Iron");
+pictish.tag.push_back("Classical");
+pictish.skill[0].name="Barbaric Assault";
+pictish.skill[0].type='b';
+pictish.skill[0].cd=-1;
+pictish.skill[0].bcd=-1;
+pictish.skill[0].des="Deal dmg to an enemy. Triple the damage if the enemy blocks.";
+pictish.skill[1].name="Furor Celtica";
+pictish.skill[1].type='s';
+pictish.skill[1].cd=0;
+pictish.skill[1].bcd=3;
+pictish.skill[1].des="Deal dmg to all enemies which can't be blocked and will remove block from all enemies.";
+pictish.skill[1].des="Deal dmg to all enemies which can't be blocked and will remove block from all enemies.";
+champions.push_back(pictish);
 }
 void spartarslash(){
 	base_dmg=1.6;
@@ -1327,4 +1447,204 @@ void determinedslash(){
 void templar_skill(int skill_num){
 	if(skill_num==1)determinedslash();
 	else breakthrough();
+}
+
+
+
+void macesmash(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.2;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp>0){
+					if(pos[enemy].knock>0){
+						if(rand()%2==1)stun(enemy);
+					}
+					gain(enemy,"Knock",2);
+				}
+			}
+	}
+}
+void warcry(){
+		system("CLS");
+		skill_use(1);
+		gain(turn,"Protect",2);
+		gain(turn,"Defense Up,",2);
+		for(int i=0;i<10;i++){
+			if(pos[i].hp>0&&pos[i].player==pos[turn].player&&i!=turn){
+				gain(i,"Attack Up",2);
+				if(find_tag(i,"Eurasian"))gain_turn_meter(i,50);
+			}
+}}
+void mongul_skill(int skill_num){
+	if(skill_num==1)macesmash();
+	else warcry();
+}
+
+
+
+void manhunting(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.8;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp==0){
+					for(int i=0;i<10;i++){
+						if(pos[i].player==pos[turn].player&&pos[i].hp>0)gain_turn_meter(i,25);
+					}
+				}
+			}
+	}
+}
+void nomadicsurvivor(){
+		system("CLS");
+		skill_use(1);
+		gain(turn,"Attack Up",1);
+		gain(turn,"Speed Up,",1);
+		gain(turn,"Evade",-1);
+}
+void nomad_skill(int skill_num){
+	if(skill_num==1)manhunting();
+	else nomadicsurvivor();
+}
+
+
+
+void sharkteeth(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.4;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp==0)heal(turn,pos[turn].current_stat.max_hp);
+			}
+	}
+}
+void haka(){
+		system("CLS");
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].hp>0&&pos[i].player!=pos[turn].player){
+				dispel_buff(i);
+				remove_turn_meter(i,50);
+				gain(i,"Defense Down",2);
+			}else if(pos[i].hp>0)gain(i,"Attack Up",2);
+		}
+}
+void maori_skill(int skill_num){
+	if(skill_num==1)sharkteeth();
+	else haka();
+}
+
+
+
+void katarslash(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.8;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def/2);
+			}
+	}
+}
+void chakram(){
+	vector<int> temp;
+	int random;
+	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(1);
+			if(hit()){
+				base_dmg=3.4;
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				for(int i=0;i<10;i++){
+					if(pos[i].hp>0&&pos[i].player!=pos[turn].player&&pos[i].stealth==0&&i!=enemy)temp.push_back(i);
+				}
+					while(temp.size()>0){
+						random=rand()%temp.size();
+						enemy=temp[random];
+						temp.erase(temp.begin()+random);
+						if(hit()){
+							base_dmg=3.4;
+							block();
+							deal_dmg(base_dmg,pos[enemy].current_stat.def);
+						}else break;
+					}	
+					}
+			}
+	}
+void rajput_skill(int skill_num){
+	if(skill_num==1)katarslash();
+	else chakram();
+}
+/*pictish.name="Pictish";
+pictish.role="Attacker";
+pictish.id=26;
+pictish.hp=144;
+pictish.atk=14;
+pictish.def=11;
+pictish.spd=16;
+pictish.tag.push_back("Scandinavian");
+pictish.tag.push_back("Celtic");
+pictish.tag.push_back("Iron");
+pictish.tag.push_back("Classical");
+pictish.skill[0].name="Barbaric Assault";
+pictish.skill[0].type='b';
+pictish.skill[0].cd=-1;
+pictish.skill[0].bcd=-1;
+pictish.skill[0].des="Deal dmg to an enemy. Triple the damage if the enemy blocks.";
+pictish.skill[1].name="Furor Celtica";
+pictish.skill[1].type='s';
+pictish.skill[1].cd=0;
+pictish.skill[1].bcd=3;
+pictish.skill[1].des="Deal dmg to all enemies which can't be blocked and will remove block from all enemies.";
+champions.push_back(pictish);*/
+void barbaricassault(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				base_dmg=1.8;
+				if(pos[enemy].block)base_dmg*=3;	
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}
+	}
+}
+void furorceltica(){
+		system("CLS");
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].hp>0&&pos[i].player!=pos[turn].player){
+				enemy=i;
+				if(hit()){
+					if(pos[enemy].block){
+						pos[enemy].block=false;
+						cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" loses Block!\n";
+					}
+					deal_dmg(base_dmg,pos[enemy].current_stat.def);
+					}
+			}
+		}
+			
+	}
+void pictish_skill(int skill_num){
+	if(skill_num==1)barbaricassault();
+	else furorceltica();
 }
