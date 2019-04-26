@@ -27,6 +27,7 @@ champion nomad;
 champion maori;
 champion rajput;
 champion pictish;
+//champion gallic;
 void declare(){
 spartan.name="Spartan";
 spartan.role="Tank";
@@ -35,10 +36,12 @@ spartan.hp=167;
 spartan.atk=15;
 spartan.def=16;
 spartan.spd=13;
-spartan.tag.push_back("Greek");
+if(spartan.tag.size()==0){
+	spartan.tag.push_back("Greek");
 spartan.tag.push_back("Classical");
 spartan.tag.push_back("Mediterranean");
 spartan.tag.push_back("Bronze");
+}
 spartan.skill[0].name="Spartar Slash";
 spartan.skill[0].type='b';
 spartan.skill[0].cd=-1;
@@ -58,10 +61,12 @@ samurai.hp=144;
 samurai.atk=18;
 samurai.def=14;
 samurai.spd=15;
-samurai.tag.push_back("Japanese");
+if(samurai.tag.size()==0){
+	samurai.tag.push_back("Japanese");
 samurai.tag.push_back("Asian");
 samurai.tag.push_back("Medieval");
 samurai.tag.push_back("Steel");
+}
 samurai.skill[0].name="Katana Draw";
 samurai.skill[0].type='b';
 samurai.skill[0].cd=-1;
@@ -1592,59 +1597,61 @@ void rajput_skill(int skill_num){
 	if(skill_num==1)katarslash();
 	else chakram();
 }
-/*pictish.name="Pictish";
-pictish.role="Attacker";
-pictish.id=26;
-pictish.hp=144;
-pictish.atk=14;
-pictish.def=11;
-pictish.spd=16;
-pictish.tag.push_back("Scandinavian");
-pictish.tag.push_back("Celtic");
-pictish.tag.push_back("Iron");
-pictish.tag.push_back("Classical");
-pictish.skill[0].name="Barbaric Assault";
-pictish.skill[0].type='b';
-pictish.skill[0].cd=-1;
-pictish.skill[0].bcd=-1;
-pictish.skill[0].des="Deal dmg to an enemy. Triple the damage if the enemy blocks.";
-pictish.skill[1].name="Furor Celtica";
-pictish.skill[1].type='s';
-pictish.skill[1].cd=0;
-pictish.skill[1].bcd=3;
-pictish.skill[1].des="Deal dmg to all enemies which can't be blocked and will remove block from all enemies.";
-champions.push_back(pictish);*/
-void barbaricassault(){
+/*gallic.name="Gallic";
+gallic.role="Tank";
+gallic.id=27;
+gallic.hp=156;
+gallic.atk=14;
+gallic.def=14;
+gallic.spd=14;
+gallic.tag.push_back("Scandinavian");
+gallic.tag.push_back("Celtic");
+gallic.tag.push_back("Iron");
+gallic.tag.push_back("Classical");
+gallic.skill[0].name="Gallic Bladework";
+gallic.skill[0].type='b';
+gallic.skill[0].cd=-1;
+gallic.skill[0].bcd=-1;
+gallic.skill[0].des="Deal dmg to an enemy. Gallic heals for 10% of max HP. Other Celtic allies heal for 5% of max HP.";
+gallic.skill[1].name="Shield Crash";
+gallic.skill[1].type='s';
+gallic.skill[1].cd=0;
+gallic.skill[1].bcd=3;
+gallic.skill[1].des="If this attack hits, dispel all Buffs from the enemy, for each buff removed, all alies heal for 5% HP.";
+champions.push_back(gallic);
+void gallicbladework(){
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.8;
-				if(pos[enemy].block)base_dmg*=3;	
+				base_dmg=1.4;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}heal(turn,pos[turn].current_stat.max_hp/10);
+			for(int i=0;i<10;i++){
+				if(pos[i].hp>0&&pos[i].player==pos[turn].player&&find_tag(i,"Celtic")&&)heal(i,pos[i].current_stat.max_hp/20);
 			}
 	}
 }
-void furorceltica(){
+void shieldcrash(){
+	int count=0;
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+		if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
-		for(int i=0;i<10;i++){
-			if(pos[i].hp>0&&pos[i].player!=pos[turn].player){
-				enemy=i;
-				if(hit()){
-					if(pos[enemy].block){
-						pos[enemy].block=false;
-						cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" loses Block!\n";
-					}
-					deal_dmg(base_dmg,pos[enemy].current_stat.def);
-					}
+			if(hit()){
+				base_dmg=2.2;
+				count=dispel_buff(enemy);
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}heal(turn,pos[turn].current_stat.max_hp/10);
+			for(int i=0;i<10;i++){
+				if(pos[i].hp>0&&pos[i].player==pos[turn].player&&find_tag(i,"Celtic")&&)heal(i,pos[i].current_stat.max_hp/20);
 			}
-		}
-			
+	}
 	}
 void pictish_skill(int skill_num){
 	if(skill_num==1)barbaricassault();
 	else furorceltica();
-}
+}*/

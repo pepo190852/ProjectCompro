@@ -6,7 +6,7 @@ int targetenemy(string name,string des){
 	cout<<"Use "<<name<<" at..."<<"\n";
 	int prior=pos[0].prior;
 	for(int i=0;i<10;i++){
-		if(pos[i].player!=pos[turn].player){
+		if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
 			if(pos[i].prior>prior)prior=pos[i].prior;
 		}
 	}

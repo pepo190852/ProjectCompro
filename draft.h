@@ -116,7 +116,7 @@ void use_skill(int id,int skill_num){
 	else if(id==23)nomad_skill(skill_num);
 	else if(id==24)maori_skill(skill_num);
 	else if(id==25)rajput_skill(skill_num);
-	else if(id==26)pictish_skill(skill_num);
+	//else if(id==26)pictish_skill(skill_num);
 }
 int cal_turn_meter(){
 	while(true){
