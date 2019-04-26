@@ -264,6 +264,10 @@ void endturn(){
 	if(pos[turn].skill[1].cd>0)pos[turn].skill[1].cd--;
 }
 void viewstat(champion view){
+	cout<<"MAX HP : "<<view.hp<<"\n";
+	cout<<"ATTACK : "<<view.atk<<"\n";
+	cout<<"DEFENSE : "<<view.def<<"\n";
+	cout<<"SPEED : "<<view.spd<<"\n";
 	/*cout<<"HP : |";
    	for(int o=100;o<view.hp;o+=11){
    		cout<<"|";
