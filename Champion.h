@@ -109,10 +109,12 @@ jaguar.hp=144;
 jaguar.atk=17;
 jaguar.def=13;
 jaguar.spd=18;
-jaguar.tag.push_back("Mesoamerican");
-jaguar.tag.push_back("American");
-jaguar.tag.push_back("Medieval");
-jaguar.tag.push_back("Obsidian");
+if(jaguar.tag.size()==0){
+	jaguar.tag.push_back("Mesoamerican");
+	jaguar.tag.push_back("American");
+	jaguar.tag.push_back("Medieval");
+	jaguar.tag.push_back("Obsidian");
+}
 jaguar.skill[0].name="Macuahuitl Smash";
 jaguar.skill[0].type='b';
 jaguar.skill[0].cd=-1;
@@ -132,9 +134,11 @@ crusader.hp=156;
 crusader.atk=14;
 crusader.def=17;
 crusader.spd=12;
-crusader.tag.push_back("European");
-crusader.tag.push_back("Medieval");
-crusader.tag.push_back("Steel");
+if(crusader.tag.size()==0){
+	crusader.tag.push_back("European");
+	crusader.tag.push_back("Medieval");
+	crusader.tag.push_back("Steel");
+}
 crusader.skill[0].name="Pilgrim Slash";
 crusader.skill[0].type='b';
 crusader.skill[0].cd=-1;
@@ -154,10 +158,12 @@ khopesh.hp=144;
 khopesh.atk=15;
 khopesh.def=13;
 khopesh.spd=13;
-khopesh.tag.push_back("Mesopotamian");
-khopesh.tag.push_back("Ancient");
-khopesh.tag.push_back("Bronze");
-khopesh.tag.push_back("African");
+if(khopesh.tag.size()==0){
+	khopesh.tag.push_back("Mesopotamian");
+	khopesh.tag.push_back("Ancient");
+	khopesh.tag.push_back("Bronze");
+	khopesh.tag.push_back("African");
+}
 khopesh.skill[0].name="Scythe Cleave";
 khopesh.skill[0].type='b';
 khopesh.skill[0].cd=-1;
@@ -177,10 +183,12 @@ legion.hp=178;
 legion.atk=14;
 legion.def=13;
 legion.spd=13;
-legion.tag.push_back("Roman");
-legion.tag.push_back("Mediterranean");
-legion.tag.push_back("Classical");
-legion.tag.push_back("Iron");
+if(legion.tag.size()==0){
+	legion.tag.push_back("Roman");
+	legion.tag.push_back("Mediterranean");
+	legion.tag.push_back("Classical");
+	legion.tag.push_back("Iron");
+}
 legion.skill[0].name="Gladius Slash";
 legion.skill[0].type='b';
 legion.skill[0].cd=-1;
@@ -200,10 +208,12 @@ ninja.hp=122;
 ninja.atk=16;
 ninja.def=13;
 ninja.spd=18;
-ninja.tag.push_back("Japanese");
-ninja.tag.push_back("Asian");
-ninja.tag.push_back("Medieval");
-ninja.tag.push_back("Steel");
+if(ninja.tag.size()==0){
+	ninja.tag.push_back("Japanese");
+	ninja.tag.push_back("Asian");
+	ninja.tag.push_back("Medieval");
+	ninja.tag.push_back("Steel");
+}
 ninja.skill[0].name="Shuriken";
 ninja.skill[0].type='b';
 ninja.skill[0].cd=-1;
@@ -223,9 +233,11 @@ monk.hp=133;
 monk.atk=17;
 monk.def=12;
 monk.spd=17;
-monk.tag.push_back("Asian");
-monk.tag.push_back("Mystic");
-monk.tag.push_back("Medieval");
+if(monk.tag.size()==0){
+	monk.tag.push_back("Asian");
+	monk.tag.push_back("Mystic");
+	monk.tag.push_back("Medieval");
+}
 monk.skill[0].name="Staff Slam";
 monk.skill[0].type='b';
 monk.skill[0].cd=-1;
@@ -245,10 +257,12 @@ shaman.hp=167;
 shaman.atk=14;
 shaman.def=13;
 shaman.spd=13;
-shaman.tag.push_back("American");
-shaman.tag.push_back("Amerindian");
-shaman.tag.push_back("Mystic");
-shaman.tag.push_back("Ancient");
+if(shaman.tag.size()==0){
+	shaman.tag.push_back("American");
+	shaman.tag.push_back("Amerindian");
+	shaman.tag.push_back("Mystic");
+	shaman.tag.push_back("Ancient");
+}
 shaman.skill[0].name="Spiritual Assault";
 shaman.skill[0].type='b';
 shaman.skill[0].cd=-1;
@@ -268,10 +282,12 @@ priest.hp=122;
 priest.atk=15;
 priest.def=12;
 priest.spd=13;
-priest.tag.push_back("Mesopotamian");
-priest.tag.push_back("African");
-priest.tag.push_back("Mystic");
-priest.tag.push_back("Ancient");
+if(priest.tag.size()==0){
+	priest.tag.push_back("Mesopotamian");
+	priest.tag.push_back("African");
+	priest.tag.push_back("Mystic");
+	priest.tag.push_back("Ancient");
+}
 priest.skill[0].name="Cursed Staff";
 priest.skill[0].type='b';
 priest.skill[0].cd=-1;
@@ -291,6 +307,11 @@ impi.hp=144;
 impi.atk=15;
 impi.def=13;
 impi.spd=17;
+if(impi.tag.size()==0){
+	impi.tag.push_back("African");
+	impi.tag.push_back("Iron");
+	impi.tag.push_back("Medieval");
+}
 impi.tag.push_back("African");
 impi.tag.push_back("Iron");
 impi.tag.push_back("Medieval");
@@ -313,10 +334,12 @@ prophet.hp=133;
 prophet.atk=15;
 prophet.def=13;
 prophet.spd=12;
-prophet.tag.push_back("Mesoamerican");
-prophet.tag.push_back("American");
-prophet.tag.push_back("Mystic");
-prophet.tag.push_back("Classical");
+if(prophet.tag.size()==0){
+	prophet.tag.push_back("Mesoamerican");
+	prophet.tag.push_back("American");
+	prophet.tag.push_back("Mystic");
+	prophet.tag.push_back("Classical");
+}
 prophet.skill[0].name="B'aktun-Shifting Strike";
 prophet.skill[0].type='b';
 prophet.skill[0].cd=-1;
@@ -336,10 +359,12 @@ eagle.hp=167;
 eagle.atk=14;
 eagle.def=16;
 eagle.spd=14;
-eagle.tag.push_back("Mesoamerican");
-eagle.tag.push_back("American");
-eagle.tag.push_back("Obsidian");
-eagle.tag.push_back("Medieval");
+if(eagle.tag.size()==0){
+	eagle.tag.push_back("Mesoamerican");
+	eagle.tag.push_back("American");
+	eagle.tag.push_back("Obsidian");
+	eagle.tag.push_back("Medieval");
+}
 eagle.skill[0].name="Obsidian Lance";
 eagle.skill[0].type='b';
 eagle.skill[0].cd=-1;
@@ -358,10 +383,12 @@ puma.hp=167;
 puma.atk=15;
 puma.def=13;
 puma.spd=12;
-puma.tag.push_back("Andean");
-puma.tag.push_back("American");
-puma.tag.push_back("Bronze");
-puma.tag.push_back("Medieval");
+if(puma.tag.size()==0){
+	puma.tag.push_back("Andean");
+	puma.tag.push_back("American");
+	puma.tag.push_back("Bronze");
+	puma.tag.push_back("Medieval");
+}
 puma.skill[0].name="Grand Cleave";
 puma.skill[0].type='b';
 puma.skill[0].cd=-1;
@@ -381,10 +408,13 @@ gladiator.hp=178;
 gladiator.atk=16;
 gladiator.def=12;
 gladiator.spd=14;
-gladiator.tag.push_back("Roman");
-gladiator.tag.push_back("Mediterranean");
-gladiator.tag.push_back("Iron");
-gladiator.tag.push_back("Classical");gladiator.skill[0].name="Trident Attack";
+if(gladiator.tag.size()==0){
+	gladiator.tag.push_back("Roman");
+	gladiator.tag.push_back("Mediterranean");
+	gladiator.tag.push_back("Iron");
+	gladiator.tag.push_back("Classical");
+}
+gladiator.skill[0].name="Trident Attack";
 gladiator.skill[0].type='b';
 gladiator.skill[0].cd=-1;
 gladiator.skill[0].bcd=-1;
@@ -403,10 +433,12 @@ hoplite.hp=156;
 hoplite.atk=15;
 hoplite.def=16;
 hoplite.spd=13;
-hoplite.tag.push_back("Greek");
-hoplite.tag.push_back("Mediterranean");
-hoplite.tag.push_back("Bronze");
-hoplite.tag.push_back("Classical");
+if(hoplite.tag.size()==0){
+	hoplite.tag.push_back("Greek");
+	hoplite.tag.push_back("Mediterranean");
+	hoplite.tag.push_back("Bronze");
+	hoplite.tag.push_back("Classical");
+}
 hoplite.skill[0].name="Steady Thrust";
 hoplite.skill[0].type='b';
 hoplite.skill[0].cd=-1;
@@ -426,10 +458,12 @@ hypaspist.hp=133;
 hypaspist.atk=15;
 hypaspist.def=12;
 hypaspist.spd=17;
-hypaspist.tag.push_back("Greek");
-hypaspist.tag.push_back("Mediterranean");
-hypaspist.tag.push_back("Bronze");
-hypaspist.tag.push_back("Classical");
+if(hypaspist.tag.size()==0){
+	hypaspist.tag.push_back("Greek");
+	hypaspist.tag.push_back("Mediterranean");
+	hypaspist.tag.push_back("Bronze");
+	hypaspist.tag.push_back("Classical");
+}
 hypaspist.skill[0].name="Dory Barrage";
 hypaspist.skill[0].type='b';
 hypaspist.skill[0].cd=-1;
@@ -449,9 +483,11 @@ zande.hp=144;
 zande.atk=16;
 zande.def=13;
 zande.spd=14;
-zande.tag.push_back("African");
-zande.tag.push_back("Iron");
-zande.tag.push_back("Classical");
+if(zande.tag.size()==0){
+	zande.tag.push_back("African");
+	zande.tag.push_back("Iron");
+	zande.tag.push_back("Classical");
+}
 zande.skill[0].name="Decapitator";
 zande.skill[0].type='b';
 zande.skill[0].cd=-1;
@@ -471,9 +507,11 @@ immortal.hp=144;
 immortal.atk=13;
 immortal.def=15;
 immortal.spd=14;
-immortal.tag.push_back("Middle-Eastern");
-immortal.tag.push_back("Bronze");
-immortal.tag.push_back("Classical");
+if(immortal.tag.size()==0){
+	immortal.tag.push_back("Middle-Eastern");
+	immortal.tag.push_back("Bronze");
+	immortal.tag.push_back("Classical");
+}
 immortal.skill[0].name="Mortal Smack";
 immortal.skill[0].type='b';
 immortal.skill[0].cd=-1;
@@ -493,10 +531,12 @@ ronin.hp=156;
 ronin.atk=14;
 ronin.def=15;
 ronin.spd=13;
-ronin.tag.push_back("Japanese");
-ronin.tag.push_back("Asian");
-ronin.tag.push_back("Steel");
-ronin.tag.push_back("Medieval");
+if(ronin.tag.size()==0){
+	ronin.tag.push_back("Japanese");
+	ronin.tag.push_back("Asian");
+	ronin.tag.push_back("Steel");
+	ronin.tag.push_back("Medieval");
+}
 ronin.skill[0].name="Naginata";
 ronin.skill[0].type='b';
 ronin.skill[0].cd=-1;
@@ -516,9 +556,11 @@ templar.hp=144;
 templar.atk=16;
 templar.def=15;
 templar.spd=14;
-templar.tag.push_back("European");
-templar.tag.push_back("Steel");
-templar.tag.push_back("Medieval");
+if(templar.tag.size()==0){
+	templar.tag.push_back("European");
+	templar.tag.push_back("Steel");
+	templar.tag.push_back("Medieval");
+}
 templar.skill[0].name="Determined Slash";
 templar.skill[0].type='b';
 templar.skill[0].cd=-1;
@@ -538,10 +580,12 @@ mongul.hp=178;
 mongul.atk=14;
 mongul.def=14;
 mongul.spd=12;
-mongul.tag.push_back("Eurasian");
-mongul.tag.push_back("Asian");
-mongul.tag.push_back("Steel");
-mongul.tag.push_back("Medieval");
+if(mongul.tag.size()==0){
+	mongul.tag.push_back("Eurasian");
+	mongul.tag.push_back("Asian");
+	mongul.tag.push_back("Steel");
+	mongul.tag.push_back("Medieval");
+}
 mongul.skill[0].name="Mace Smash";
 mongul.skill[0].type='b';
 mongul.skill[0].cd=-1;
@@ -561,10 +605,12 @@ nomad.hp=133;
 nomad.atk=16;
 nomad.def=12;
 nomad.spd=14;
-nomad.tag.push_back("Eurasian");
-nomad.tag.push_back("Asian");
-nomad.tag.push_back("Steel");
-nomad.tag.push_back("Medieval");
+if(nomad.tag.size()==0){
+	nomad.tag.push_back("Eurasian");
+	nomad.tag.push_back("Asian");
+	nomad.tag.push_back("Steel");
+	nomad.tag.push_back("Medieval");
+}
 nomad.skill[0].name="Man Hunting";
 nomad.skill[0].type='b';
 nomad.skill[0].cd=-1;
@@ -584,9 +630,11 @@ maori.hp=167;
 maori.atk=14;
 maori.def=12;
 maori.spd=16;
-maori.tag.push_back("Polynesian");
-maori.tag.push_back("Obsidian");
-maori.tag.push_back("Classical");
+if(maori.tag.size()==0){
+	maori.tag.push_back("Polynesian");
+	maori.tag.push_back("Obsidian");
+	maori.tag.push_back("Classical");
+}
 maori.skill[0].name="Shark-Teeth";
 maori.skill[0].type='b';
 maori.skill[0].cd=-1;
@@ -606,10 +654,12 @@ rajput.hp=167;
 rajput.atk=18;
 rajput.def=15;
 rajput.spd=16;
-rajput.tag.push_back("Asian");
-rajput.tag.push_back("Indian");
-rajput.tag.push_back("Iron");
-rajput.tag.push_back("Classical");
+if(rajput.tag.size()==0){
+	rajput.tag.push_back("Asian");
+	rajput.tag.push_back("Indian");
+	rajput.tag.push_back("Iron");
+	rajput.tag.push_back("Classical");
+}
 rajput.skill[0].name="Katar Slash";
 rajput.skill[0].type='b';
 rajput.skill[0].cd=-1;
@@ -629,10 +679,12 @@ pictish.hp=144;
 pictish.atk=14;
 pictish.def=11;
 pictish.spd=16;
-pictish.tag.push_back("Scandinavian");
-pictish.tag.push_back("Celtic");
-pictish.tag.push_back("Iron");
-pictish.tag.push_back("Classical");
+if(pictish.tag.size()==0){
+	pictish.tag.push_back("Scandinavian");
+	pictish.tag.push_back("Celtic");
+	pictish.tag.push_back("Iron");
+	pictish.tag.push_back("Classical");
+}
 pictish.skill[0].name="Barbaric Assault";
 pictish.skill[0].type='b';
 pictish.skill[0].cd=-1;
@@ -1060,9 +1112,9 @@ void shallowtomb(){
 				gain_turn_meter(r,100);
 			}
 			//cout<<"Mesopotamian ally acquired, start reviving "<<pos[r].name<<"...\n";
-			
+
 			//cout<<"Mesopotamian ally's revived...\n";
-			
+
 			//cout<<"Mesopotamian ally gain turn meter...\n";
 		}
 }
@@ -1185,7 +1237,7 @@ void grandcleave(){
 		if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
 			enemy=i;
 			if(hit()){
-			base_dmg=1.6;	
+			base_dmg=1.6;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			}
@@ -1198,7 +1250,7 @@ void risingaltitude(){
 		system("CLS");
 		skill_use(1);
 		if(hit()){
-			base_dmg=2.2;	
+			base_dmg=2.2;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(pos[enemy].hp>0)int temp=dispel_buff(enemy);
@@ -1219,7 +1271,7 @@ void tridentattack(){
 		skill_use(0);
 		if(pos[enemy].def_down>0)add=true;
 		if(hit()){
-			base_dmg=1.4;	
+			base_dmg=1.4;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(pos[enemy].hp>0)gain(enemy,"Defense Down",2);
@@ -1253,7 +1305,7 @@ void steadythrust(){
 		system("CLS");
 		skill_use(0);
 		if(hit()){
-			base_dmg=1.8;	
+			base_dmg=1.8;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			}if(pos[turn].block){
@@ -1286,7 +1338,7 @@ void dorybarrage(){
 		skill_use(0);
 		for(int i=0;i<2;i++){
 			if(hit()){
-				base_dmg=1.0;	
+				base_dmg=1.0;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			}
@@ -1317,7 +1369,7 @@ void decapitator(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.0;	
+				base_dmg=1.0;
 				block();
 				if(pos[enemy].hp<pos[enemy].current_stat.max_hp/4)deal_dmg(base_dmg,0);
 				else deal_dmg(base_dmg,pos[enemy].current_stat.def);
@@ -1346,7 +1398,7 @@ void mortalsmack(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.8;	
+				base_dmg=1.8;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				if(pos[enemy].hp>0)gain(enemy,"Heal Block",1);
@@ -1378,7 +1430,7 @@ void naginata(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.4;	
+				base_dmg=1.4;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				if(pos[enemy].hp>0){
@@ -1420,7 +1472,7 @@ void breakthrough(){
 					pos[turn].skill[1].cd--;
 					cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"'s cooldown reduced by 1!\n";
 					remove_turn_meter(enemy,100);
-				}	
+				}
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 	}int temp=dispel_debuff(turn);
@@ -1436,7 +1488,7 @@ void determinedslash(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.4;	
+				base_dmg=1.4;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				if(pos[enemy].hp>0){
@@ -1462,7 +1514,7 @@ void macesmash(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.2;	
+				base_dmg=1.2;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				if(pos[enemy].hp>0){
@@ -1498,7 +1550,7 @@ void manhunting(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.8;	
+				base_dmg=1.8;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				if(pos[enemy].hp==0){
@@ -1529,7 +1581,7 @@ void sharkteeth(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.4;	
+				base_dmg=1.4;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				if(pos[enemy].hp==0)heal(turn,pos[turn].current_stat.max_hp);
@@ -1560,7 +1612,7 @@ void katarslash(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.8;	
+				base_dmg=1.8;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def/2);
 			}
@@ -1589,7 +1641,7 @@ void chakram(){
 							block();
 							deal_dmg(base_dmg,pos[enemy].current_stat.def);
 						}else break;
-					}	
+					}
 					}
 			}
 	}
