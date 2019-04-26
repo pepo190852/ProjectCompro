@@ -309,6 +309,7 @@ int drafting(int player,bool picked1[],bool picked2[]){
 						while(picked2[i])i=next_champion(i);
 						centertext("Player 2's turn to DRAFT!!!");
 					} 
+					view.tag.clear();
 					view=upload(i);
 					cout<<"Champion's ID : "<<view.id<<"\n";
    					centertext(view.name);

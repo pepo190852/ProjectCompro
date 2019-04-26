@@ -104,6 +104,7 @@ int main(){
 	}
 	else if(draftstate==2){
 			for(int j=0;j<10;j++){
+				view.tag.clear();
 				//if(ban)banning(j);
 				i=drafting(queue[j],picked1,picked2);
 				if(i==-1){
