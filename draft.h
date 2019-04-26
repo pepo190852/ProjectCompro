@@ -306,6 +306,7 @@ int drafting(int player,bool picked1[],bool picked2[]){
 						centertext("Player 2's turn to DRAFT!!!");
 					} 
 					view=upload(i);
+					cout<<"Champion's ID : "<<view.id<<"\n";
    					centertext(view.name);
    					centertext(view.role);
    					cout<<"\n";
