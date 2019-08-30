@@ -5,7 +5,7 @@
 #include<ctime>
 using namespace std;
 int turn=-1,enemy=-1,dmg=0;
-double base_dmg=0,global_dmg_multiplier=1;
+double base_dmg=0,global_dmg_multiplier=1.5;
 string stat[4]={"Max HP","Attack","Defense","Speed"};
 char p='a';
 void centertext(string x){
