@@ -5,7 +5,7 @@
 #include<ctime>
 using namespace std;
 int turn=-1,enemy=-1,dmg=0;
-double base_dmg=0;
+double base_dmg=0,global_dmg_multiplier=1;
 string stat[4]={"Max HP","Attack","Defense","Speed"};
 char p='a';
 void centertext(string x){
@@ -23,9 +23,9 @@ struct skill{
 struct position{
 	string name;
 	int id=-1,player=0,tm=0,prior=1;
-	int hp_up=0,atk_up=0,def_up=0,spd_up=0,hp_down=0,atk_down=0,def_down=0,spd_down=0,protect=0,stealth=0,silenced=0,hp=0,heal_block=0,knock=0;
+	int hp_up=0,atk_up=0,def_up=0,spd_up=0,hp_down=0,atk_down=0,def_down=0,spd_down=0,protect=0,stealth=0,silenced=0,hp=0,heal_block=0,knock=0,buff_block=0;
 	status base_stat,current_stat;
-	bool block=false,evade=false,blind=false,stun=false;
+	bool block=false,evade=false,blind=false,stun=false,deathproof=false;
 	skill skill[2];
 	vector<int> bleed;
 	vector<int> regeneration;

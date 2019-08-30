@@ -3,7 +3,7 @@ int targetenemy(string name,string des){
 	char key[10]={'i','q','w','o','p','e','a','k','l','s'},p='p';
 	while(p=='p'){
 		system("CLS");
-	cout<<"Use "<<name<<" at..."<<"\n";
+	cout<<"Use "<<name<<" at..."<<"\n\n";
 	int prior=pos[0].prior;
 	for(int i=0;i<10;i++){
 		if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
@@ -13,13 +13,57 @@ int targetenemy(string name,string des){
 	for(int i=0;i<10;i++){
 		if(pos[i].player!=pos[turn].player&&pos[i].prior==prior&&pos[i].hp>0){
 			cout<<"'"<<key[i]<<"' "<<pos[i].name<<" HP : "<<pos[i].hp<<"/"<<pos[i].current_stat.max_hp<<" turn meter : "<<pos[i].tm<<"/100\n";
+			if(pos[i].hp_up>0)cout<<" HlUp("<<pos[i].hp_up<<")";
+			if(pos[i].hp_down>0)cout<<" HlDw("<<pos[i].hp_down<<")";
+			if(pos[i].atk_up>0)cout<<" AtUp("<<pos[i].atk_up<<")";
+			if(pos[i].atk_down>0)cout<<" AtDw("<<pos[i].atk_down<<")";
+			if(pos[i].def_up>0)cout<<" DfUp("<<pos[i].def_up<<")";
+			if(pos[i].def_down>0)cout<<" DfDw("<<pos[i].def_down<<")";
+			if(pos[i].spd_up>0)cout<<" SpUp("<<pos[i].spd_up<<")";
+			if(pos[i].spd_down>0)cout<<" SpDw("<<pos[i].spd_down<<")";
+			if(pos[i].block)cout<<" Blc";
+			if(pos[i].evade)cout<<" Evd";
+			if(pos[i].blind)cout<<" Bli";
+			if(pos[i].stun)cout<<" Stun";
+			if(pos[i].silenced>0)cout<<" Sil("<<pos[i].silenced<<")";
+			if(pos[i].heal_block>0)cout<<" HlBl("<<pos[i].heal_block<<")";
+			if(pos[i].knock>0)cout<<" Knoc("<<pos[i].knock<<")";
+			if(pos[i].stealth>0)cout<<" Stlt("<<pos[i].stealth<<")";
+			if(pos[i].protect>0)cout<<" Prot("<<pos[i].protect<<")";
+			if(pos[i].buff_block>0)cout<<" BfBl("<<pos[i].buff_block<<")";
+			if(pos[i].deathproof)cout<<" Dtpf";
+			if(pos[i].bleed.size()>0)cout<<" Bl x"<<pos[i].bleed.size();
+			if(pos[i].regeneration.size()>0)cout<<" Re x"<<pos[i].regeneration.size();
+			cout<<"\n\n";
+		}
+	}
+	cout<<"\n"<<des<<"\n\n'b' to cancle...";
+	while(p!='b'){
+		p=_getch();
+		for(int i=0;i<10;i++){
+			if(p==key[i]&&pos[i].player!=pos[turn].player&&pos[i].prior==prior&&pos[i].hp>0){
+				return i;
+			}else if(p=='b')break;
+		}
+	}
+	}
+	return -2;
+}
+int targetally(string name,string des){
+	char key[10]={'i','q','w','o','p','e','a','k','l','s'},p='p';
+	while(p=='p'){
+		system("CLS");
+	cout<<"Use "<<name<<" at..."<<"\n";
+	for(int i=0;i<10;i++){
+		if(pos[i].player==pos[turn].player&&pos[i].hp>0){
+			cout<<"'"<<key[i]<<"' "<<pos[i].name<<" HP : "<<pos[i].hp<<"/"<<pos[i].current_stat.max_hp<<" turn meter : "<<pos[i].tm<<"/100\n";
 		}
 	}
 	cout<<des<<"\n'b' to cancle...";
 	while(p!='b'){
 		p=_getch();
 		for(int i=0;i<10;i++){
-			if(p==key[i]&&pos[i].player!=pos[turn].player&&pos[i].prior==prior&&pos[i].hp>0){
+			if(p==key[i]&&pos[i].player==pos[turn].player&&pos[i].hp>0){
 				return i;
 			}else if(p=='b')break;
 		}
@@ -55,7 +99,8 @@ void block(){
 	}
 }
 void defeat(int target){
-	pos[target].prior=1;
+	if(!pos[target].deathproof){
+		pos[target].prior=1;
 	pos[target].tm=0;
 	pos[target].hp_up=0;
 	pos[target].hp_down=0;
@@ -75,12 +120,18 @@ void defeat(int target){
 	pos[target].silenced=0;
 	pos[target].heal_block=0;
 	pos[target].knock=0;
+	pos[target].buff_block=0;
 	pos[target].bleed.clear();
 	pos[target].regeneration.clear();
 	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" is defeated!\n";
+	}else{
+		pos[target].hp=1;
+		pos[target].deathproof=false;
+		cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" is saved by Deathproof!\nHP : "<<pos[target].hp<<"/"<<pos[target].current_stat.max_hp<<"\n";
+	}
 }
-void deal_dmg(double base,int armor){
-	base*=1.5;
+void deal_dmg(double base,double armor){
+	base*=global_dmg_multiplier;
 	int dmg;
 	double multiplier,num=20;
 	multiplier=num/(armor+num);
@@ -137,121 +188,107 @@ void update_stat(){
 }
 void gain(int target,string x,int dur){
 	int temp=dur;
+	bool blocked=false;
 	if(target==turn)dur++;
-	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains "<<x;
-	if(x=="Health Up"){
-		if(pos[target].hp_up<=dur)pos[target].hp_up=dur;
-		cout<<"("<<temp<<")";
-	}else if(x=="Attack Up"){
-		if(pos[target].atk_up<=dur)pos[target].atk_up=dur;
-		cout<<"("<<temp<<")";
-	}else if(x=="Defense Up"){
-		if(pos[target].def_up<=dur)pos[target].def_up=dur;
-		cout<<"("<<temp<<")";
-	}else if(x=="Speed Up"){
-		if(pos[target].spd_up<=dur)pos[target].spd_up=dur;
-		cout<<"("<<temp<<")";
-	}else if(x=="Health Down"){
+	if(x=="Health Down"){
 		if(pos[target].hp_down<=dur)pos[target].hp_down=dur;
-		cout<<"("<<temp<<")";
 	}else if(x=="Attack Down"){
 		if(pos[target].atk_down<=dur)pos[target].atk_down=dur;
-		cout<<"("<<temp<<")";
 	}else if(x=="Defense Down"){
 		if(pos[target].def_down<=dur)pos[target].def_down=dur;
-		cout<<"("<<temp<<")";
 	}else if(x=="Speed Down"){
 		if(pos[target].spd_down<=dur)pos[target].spd_down=dur;
-		cout<<"("<<temp<<")";
-	}else if(x=="Protect"){
-		if(pos[target].protect<=dur)pos[target].protect=dur;
-		cout<<"("<<temp<<")";
-	}else if(x=="Stealth"){
-		if(pos[target].stealth<=dur)pos[target].stealth=dur;
-		cout<<"("<<temp<<")";
 	}else if(x=="Silence"){
 		if(pos[target].silenced<=dur)pos[target].silenced=dur;
-		cout<<"("<<temp<<")";
 	}else if(x=="Knock"){
 		if(pos[target].knock<=dur)pos[target].knock=dur;
-		cout<<"("<<temp<<")";
 	}else if(x=="Heal Block"){
 		if(pos[target].heal_block<=dur)pos[target].heal_block=dur;
-		cout<<"("<<temp<<")";
+	}else if(x=="Buff Block"){
+		if(pos[target].buff_block<=dur)pos[target].buff_block=dur;
+	}else if(x=="Blind")pos[target].blind=true;
+	
+	
+	else if(pos[target].buff_block==0){
+		if(x=="Health Up"){
+		if(pos[target].hp_up<=dur)pos[target].hp_up=dur;
+	}else if(x=="Attack Up"){
+		if(pos[target].atk_up<=dur)pos[target].atk_up=dur;
+	}else if(x=="Defense Up"){
+		if(pos[target].def_up<=dur)pos[target].def_up=dur;
+	}else if(x=="Speed Up"){
+		if(pos[target].spd_up<=dur)pos[target].spd_up=dur;
+	}else if(x=="Protect"){
+		if(pos[target].protect<=dur)pos[target].protect=dur;
+	}else if(x=="Stealth"){
+		if(pos[target].stealth<=dur)pos[target].stealth=dur;
 	}else if(x=="Block")pos[target].block=true;
-	else if(x=="Blind")pos[target].blind=true;
 	else if(x=="Evade")pos[target].evade=true;
-else cout<<"no match for gain string!!!\nplease report this to dev";
+	else if(x=="Deathproof")pos[target].deathproof=true;
+	}else blocked=true;
+	if(!blocked){
+		cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains "<<x;
+		if(temp>0)cout<<"("<<temp<<")";
+	}else cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" cannot gains new buffs due to being Buff-Blocked("<<pos[target].buff_block<<")";
+//else cout<<"no match for gain string!!!\nplease report this to dev";
 	cout<<"!\n";
 	update_stat();
 }
-int dispel_buff(int target){
-	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" loses all Buffs!\n";
+int count_app(int target,string type){
 	int count=0;
-	if(pos[target].atk_up>0){
+	if(type=="Buff"){
+	if(pos[target].atk_up>0)count++;
+	if(pos[target].def_up>0)count++;
+	if(pos[target].hp_up>0)count++;
+	if(pos[target].block)count++;
+	if(pos[target].spd_up>0)count++;
+	if(pos[target].protect>0)count++;
+	if(pos[target].stealth>0)count++;
+	if(pos[target].evade)count++;
+	if(pos[target].deathproof)count++;
+	count+=pos[target].regeneration.size();
+	}else{
+	if(pos[target].atk_down>0)count++;
+	if(pos[target].def_down>0)count++;
+	if(pos[target].hp_down>0)count++;
+	if(pos[target].blind)count++;
+	if(pos[target].spd_down>0)count++;
+	if(pos[target].silenced>0)count++;
+	if(pos[target].heal_block>0)count++;
+	if(pos[target].knock>0)count++;
+	if(pos[target].stun)count++;
+	if(pos[target].buff_block>0)count++;
+	count+=pos[target].bleed.size();
+	}return count;
+}
+void dispel_buff(int target){
+	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" loses all Buffs!\n";
 		pos[target].atk_up=0;
-		count++;
-	}if(pos[target].def_up>0){
 		pos[target].def_up=0;
-		count++;
-	}if(pos[target].hp_up>0){
 		pos[target].hp_up=0;
-		count++;
-	}if(pos[target].block){
 		pos[target].block=false;
-		count++;
-	}if(pos[target].spd_up>0){
 		pos[target].spd_up=0;
-		count++;
-	}if(pos[target].protect>0){
 		pos[target].protect=0;
-		count++;
-	}if(pos[target].stealth>0){
 		pos[target].stealth=0;
-		count++;
-	}if(pos[target].evade){
 		pos[target].evade=false;
-		count++;
-	}count+=pos[target].regeneration.size();
+		pos[target].deathproof=false;
 	pos[target].regeneration.clear();
 	update_stat();
-	return count;
 }
-int dispel_debuff(int target){
+void dispel_debuff(int target){
 	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" loses all Debuffs!\n";
-	int count=0;
-	if(pos[target].atk_down>0){
 		pos[target].atk_down=0;
-		count++;
-	}if(pos[target].def_down>0){
 		pos[target].def_down=0;
-		count++;
-	}if(pos[target].hp_down>0){
 		pos[target].hp_down=0;
-		count++;
-	}if(pos[target].blind){
 		pos[target].block=false;
-		count++;
-	}if(pos[target].spd_down>0){
 		pos[target].spd_down=0;
-		count++;
-	}if(pos[target].silenced>0){
 		pos[target].silenced=0;
-		count++;
-	}if(pos[target].heal_block>0){
 		pos[target].heal_block=0;
-		count++;
-	}if(pos[target].knock>0){
 		pos[target].knock=0;
-		count++;
-	}if(pos[target].stun){
 		pos[target].stun=false;
-		count++;
-	}
-	count+=pos[target].bleed.size();
+		pos[target].buff_block=0;
 	pos[target].bleed.clear();
 	update_stat();
-	return count;
 }
 void stun(int target){
 	pos[target].stun=true;
@@ -281,12 +318,14 @@ void inflict_bleed(int target,int dur){
 	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains Bleed("<<dur<<")!\n";
 }
 void gain_regeneration(int target,int dur){
-	pos[target].regeneration.push_back(dur);
+	if(!pos[target].buff_block){
+		pos[target].regeneration.push_back(dur);
 	cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" gains Regeneration("<<dur<<")!\n";
+	}else cout<<"Player "<<pos[target].player<<"'s "<<pos[target].name<<" cannot gains new buffs due to being Buff-Blocked("<<pos[target].buff_block<<")!\n";
 }
 void bleed(){
 	system("CLS");
-	int bleed_dmg=pos[turn].current_stat.max_hp*0.05;
+	int bleed_dmg=pos[turn].current_stat.max_hp*0.05*global_dmg_multiplier;
 	if(bleed_dmg<1)bleed_dmg=1;
 	for(int i=0;i<pos[turn].bleed.size();i++){
 		pos[turn].hp-=bleed_dmg;
@@ -315,10 +354,12 @@ void regeneration(){
 	system("CLS");
 	int heal_amount=pos[turn].current_stat.max_hp*0.1;
 	if(heal_amount<1)heal_amount=1;
+	if(pos[turn].heal_block)heal_amount=0;
 	for(int i=0;i<pos[turn].regeneration.size();i++){
 		pos[turn].hp+=heal_amount;
 		if(pos[turn].hp>pos[turn].current_stat.max_hp)pos[turn].hp=pos[turn].current_stat.max_hp;
-		cout<<"+"<<heal_amount<<" HP from regeneration!\n";
+		if(pos[turn].heal_block)cout<<"Healing from Regeneration Blocked!\n";
+		else cout<<"+"<<heal_amount<<" HP from regeneration!\n";
 	}if(pos[turn].regeneration.size()>0){
 		cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"'s HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
 		if(pos[turn].player==1){

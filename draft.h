@@ -116,15 +116,27 @@ void use_skill(int id,int skill_num){
 	else if(id==23)nomad_skill(skill_num);
 	else if(id==24)maori_skill(skill_num);
 	else if(id==25)rajput_skill(skill_num);
-	//else if(id==26)pictish_skill(skill_num);
+	else if(id==26)pictish_skill(skill_num);
+	else if(id==27)druid_skill(skill_num);
 }
 int cal_turn_meter(){
+	int r=-1,max_speed=0;
+	vector<int> ready;
 	while(true){
 		for(int i=0;i<10;i++){
 			if(pos[i].tm>100)pos[i].tm=100;
 		}
 		for(int i=0;i<10;i++){
-			if(pos[i].tm==100&&pos[i].hp>0)return i;
+			if(pos[i].tm==100&&pos[i].hp>0)ready.push_back(i);
+		}if(ready.size()>0){
+			for(int i=0;i<ready.size();i++){
+				if(pos[ready[i]].current_stat.spd>max_speed)max_speed=pos[ready[i]].current_stat.spd;
+			}ready.clear();
+			for(int i=0;i<10;i++){
+			if(pos[i].tm==100&&pos[i].hp>0&&pos[i].current_stat.spd==max_speed)ready.push_back(i);
+		}	r=ready[rand()%ready.size()];
+			ready.clear();
+			return r;
 		}
 		for(int j=0;j<10;j++){
 			if(pos[j].hp>0){
@@ -195,6 +207,8 @@ void view_status(){
 			if(pos[view].knock>0)cout<<" Knocked("<<pos[view].knock<<")";
 			if(pos[view].stealth>0)cout<<" Stealth("<<pos[view].stealth<<")";
 			if(pos[view].protect>0)cout<<" Protect("<<pos[view].protect<<")";
+			if(pos[view].buff_block>0)cout<<" Buff Block("<<pos[view].buff_block<<")";
+			if(pos[view].deathproof)cout<<" Deathproof";
 			if(pos[view].bleed.size()>0)cout<<" Bleed x"<<pos[view].bleed.size();
 			if(pos[view].regeneration.size()>0)cout<<" Regeneration x"<<pos[view].regeneration.size();
 		cout<<"\n'b' to go back...";
@@ -210,16 +224,44 @@ int start_turn(){
 	char p='p';
 	while(p=='p'){
 		system("CLS");
-	cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"\n"<<"HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+	cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"\n\n"<<"HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
+			cout<<"Attack : "<<pos[turn].current_stat.atk<<"/"<<pos[turn].base_stat.atk<<"\n";
+			cout<<"Defense : "<<pos[turn].current_stat.def<<"/"<<pos[turn].base_stat.def<<"\n";
+			cout<<"Speed : "<<pos[turn].current_stat.spd<<"/"<<pos[turn].base_stat.spd<<"\n";
+			cout<<"\n";
+			if(pos[turn].hp_up>0)cout<<" Health Up("<<pos[turn].hp_up<<")";
+			if(pos[turn].hp_down>0)cout<<" Health Down("<<pos[turn].hp_down<<")";
+			if(pos[turn].atk_up>0)cout<<" Attack Up("<<pos[turn].atk_up<<")";
+			if(pos[turn].atk_down>0)cout<<" Attack Down("<<pos[turn].atk_down<<")";
+			if(pos[turn].def_up>0)cout<<" Defense Up("<<pos[turn].def_up<<")";
+			if(pos[turn].def_down>0)cout<<" Defense Down("<<pos[turn].def_down<<")";
+			if(pos[turn].spd_up>0)cout<<" Speed Up("<<pos[turn].spd_up<<")";
+			if(pos[turn].spd_down>0)cout<<" Speed Down("<<pos[turn].spd_down<<")";
+			if(pos[turn].block)cout<<" Block";
+			if(pos[turn].evade)cout<<" Evade";
+			if(pos[turn].blind)cout<<" Blind";
+			if(pos[turn].stun)cout<<" Stun";
+			if(pos[turn].silenced>0)cout<<" Silenced("<<pos[turn].silenced<<")";
+			if(pos[turn].heal_block>0)cout<<" Heal Blocked("<<pos[turn].heal_block<<")";
+			if(pos[turn].knock>0)cout<<" Knocked("<<pos[turn].knock<<")";
+			if(pos[turn].stealth>0)cout<<" Stealth("<<pos[turn].stealth<<")";
+			if(pos[turn].protect>0)cout<<" Protect("<<pos[turn].protect<<")";
+			if(pos[turn].buff_block>0)cout<<" Buff Block("<<pos[turn].buff_block<<")";
+			if(pos[turn].deathproof)cout<<" Deathproof";
+			if(pos[turn].bleed.size()>0)cout<<" Bleed x"<<pos[turn].bleed.size();
+			if(pos[turn].regeneration.size()>0)cout<<" Regeneration x"<<pos[turn].regeneration.size();
+			cout<<"\n\n";
 	if(pos[turn].player==1)cout<<"'q' ";
 	else cout<<"'i' ";
 	cout<<pos[turn].skill[0].name<<"\n"<<pos[turn].skill[0].des<<"\n";
+	cout<<"\n";
 	if(pos[turn].skill[1].cd==0&&!pos[turn].silenced){
 		if(pos[turn].player==1)cout<<"'w' ";
 		else cout<<"'o' ";
 		cout<<pos[turn].skill[1].name<<"\n"<<pos[turn].skill[1].des<<"\n";
 	}else if(pos[turn].skill[1].cd>0)cout<<pos[turn].skill[1].name<<" is on cooldown ("<<pos[turn].skill[1].cd<<")\n";
 	else cout<<"Silenced!("<<pos[turn].silenced<<")\n";
+	cout<<"\n";
 	cout<<"'g' to view...";
 	if(pos[turn].player==1){
 		while(p!='g'&&p!='q'&&p!='w'){
@@ -267,7 +309,7 @@ void viewstat(champion view){
 	cout<<"MAX HP : "<<view.hp<<"\n";
 	cout<<"ATTACK : "<<view.atk<<"\n";
 	cout<<"DEFENSE : "<<view.def<<"\n";
-	cout<<"SPEED : "<<view.spd<<"\n";
+	cout<<"SPEED : "<<view.spd<<"\n\n";
 	/*cout<<"HP : |";
    	for(int o=100;o<view.hp;o+=11){
    		cout<<"|";
@@ -320,8 +362,8 @@ int drafting(int player,bool picked1[],bool picked2[]){
    					viewstat(view);
    					viewskill(view);
    					if(player==1){
-   							cout<<"'d' to DRAFT!!! 'w' to go up 's' to go down 'v' to view drafted 'b' to go back to main menu...";
-   							while(p!='d'&&p!='w'&&p!='s'&&p!='b'&&p!='v'){
+   							cout<<"'d' to DRAFT!!! 'w' to go up 's' to go down 'v' to view drafted...";//" 'b' to go back to main menu...";
+   							while(p!='d'&&p!='w'&&p!='s'&&p!='v'){
    							p=_getch();
 					   	}
 					   	if(p=='w'){
@@ -343,8 +385,8 @@ int drafting(int player,bool picked1[],bool picked2[]){
 						   	return i;
 						   }
 					   }else{
-					   	cout<<"'k' to DRAFT!!! 'o' to go up 'l' to go down 'v' to view drafted 'b' to go back to main menu...";
-   					while(p!='k'&&p!='o'&&p!='l'&&p!='b'&&p!='v'){
+					   	cout<<"'k' to DRAFT!!! 'o' to go up 'l' to go down 'v' to view drafted...";// 'b' to go back to main menu...";
+   					while(p!='k'&&p!='o'&&p!='l'&&p!='v'){
    						p=_getch();
 					   }
 					   if(p=='o'){

@@ -27,7 +27,8 @@ champion nomad;
 champion maori;
 champion rajput;
 champion pictish;
-//champion gallic;
+champion gallic;
+champion druid;
 void declare(){
 spartan.name="Spartan";
 spartan.role="Tank";
@@ -51,7 +52,7 @@ spartan.skill[1].name="Shield Bash";
 spartan.skill[1].type='s';
 spartan.skill[1].cd=0;
 spartan.skill[1].bcd=2;
-spartan.skill[1].des="Deal dmg to an enemy. If Spartan has Block and this skill hits the enemy, Stun the enemy if they aren't already had Stun, then Spartan loses Block.";
+spartan.skill[1].des="Deal dmg to an enemy. On hitting enemy without Stun, consume Spartan's Block to Stun. On enemy's evade, remove 50% turn meter from enemy and Spartan gains +50% turn meter.";
 champions.push_back(spartan);
 
 samurai.name="Samurai";
@@ -76,7 +77,7 @@ samurai.skill[1].name="Kamikaze";
 samurai.skill[1].type='s';
 samurai.skill[1].cd=0;
 samurai.skill[1].bcd=3;
-samurai.skill[1].des="Deal dmg to an enemy. If this attack hits, Samurai also takes 20% of the damage but will not be defeated by this damage.";
+samurai.skill[1].des="Samurai gains Deathproof. Deal dmg to an enemy. If this attack hits, Samurai also deals 20% of the damage to himself and loses Deathproof.";
 champions.push_back(samurai);
 
 berserker.name="Berserker";
@@ -86,20 +87,22 @@ berserker.hp=178;
 berserker.atk=14;
 berserker.def=14;
 berserker.spd=14;
-berserker.tag.push_back("Norse");
+if(berserker.tag.size()==0){
+	berserker.tag.push_back("Norse");
 berserker.tag.push_back("Scandinavian");
 berserker.tag.push_back("Medieval");
 berserker.tag.push_back("Iron");
+}
 berserker.skill[0].name="Fury Swipe";
 berserker.skill[0].type='b';
 berserker.skill[0].cd=-1;
 berserker.skill[0].bcd=-1;
-berserker.skill[0].des="Deal dmg to an enemy. +1% Damage per each 2% of max hp left on the enemy.";
+berserker.skill[0].des="Deal dmg to an enemy. +20% Damage per living enemies.";
 berserker.skill[1].name="Enrage";
 berserker.skill[1].type='s';
 berserker.skill[1].cd=0;
 berserker.skill[1].bcd=2;
-berserker.skill[1].des="Heal self for 15% of max health. Gain 50% turn meter, Attack Up and Speed Up for 1 turn.";
+berserker.skill[1].des="Heal self for 30% of max health. Gain 50% turn meter, Attack Up and Speed Up for 1 turn but also gain Defense Down for 1 turn.";
 champions.push_back(berserker);
 
 jaguar.name="Jaguar";
@@ -172,8 +175,8 @@ khopesh.skill[0].des="Deal dmg to an enemy. If the enemy has less than 50%, deal
 khopesh.skill[1].name="Rejuvenate";
 khopesh.skill[1].type='s';
 khopesh.skill[1].cd=0;
-khopesh.skill[1].bcd=5;
-khopesh.skill[1].des="Recover 100% HP, Gain 50% turn meter and Attack Up for 1 turn.";
+khopesh.skill[1].bcd=3;
+khopesh.skill[1].des="Recover 50% HP, Gain Attack Up for 1 turn and Deathproof.";
 champions.push_back(khopesh);
 
 legion.name="Legion";
@@ -193,12 +196,12 @@ legion.skill[0].name="Gladius Slash";
 legion.skill[0].type='b';
 legion.skill[0].cd=-1;
 legion.skill[0].bcd=-1;
-legion.skill[0].des="Deal dmg to an enemy. +25% damage per defeated enemies.";
+legion.skill[0].des="Deal dmg to an enemy. 50% Chance to gain Defense Up for 1 turns.";
 legion.skill[1].name="Clear the path";
 legion.skill[1].type='s';
 legion.skill[1].cd=0;
 legion.skill[1].bcd=4;
-legion.skill[1].des="Deal dmg to an enemy. Dispel all Buffs from them and Legion gain Protect for 1 turn. Other Roman allies gain 50% turn meter.";
+legion.skill[1].des="Deal dmg to an enemy, applies Knock for 2 turns, dispel all Buffs from them and Legion gain Protect for 1 turn. All Roman allies gain Defense Up for 2 turns.";
 champions.push_back(legion);
 
 ninja.name="Ninja";
@@ -214,16 +217,16 @@ if(ninja.tag.size()==0){
 	ninja.tag.push_back("Medieval");
 	ninja.tag.push_back("Steel");
 }
-ninja.skill[0].name="Shuriken";
+ninja.skill[0].name="Black Egg Assault";
 ninja.skill[0].type='b';
 ninja.skill[0].cd=-1;
 ninja.skill[0].bcd=-1;
-ninja.skill[0].des="Deal dmg to an enemy. If this attack is not blocked, It will deals Double damage.";
-ninja.skill[1].name="Black Egg";
+ninja.skill[0].des="Deal damage to an enemy. 50% Chance to applies Blind. If there is a non-stealthed ally, Ninja gain Stealth for 1 turn, else, Ninja has 50% chance to gain Evade.";
+ninja.skill[1].name="Shuriken";
 ninja.skill[1].type='s';
 ninja.skill[1].cd=0;
 ninja.skill[1].bcd=3;
-ninja.skill[1].des="Apllies Blind to the enemy and if there is at least one another ally, Ninja gains Stealth for 2 turns, else Ninja gains Evade and 50% turn meter instead.";
+ninja.skill[1].des="Deal damage to an enemy. Triple damage if it is not blocked.";
 champions.push_back(ninja);
 
 monk.name="Monk";
@@ -312,19 +315,16 @@ if(impi.tag.size()==0){
 	impi.tag.push_back("Iron");
 	impi.tag.push_back("Medieval");
 }
-impi.tag.push_back("African");
-impi.tag.push_back("Iron");
-impi.tag.push_back("Medieval");
 impi.skill[0].name="Iklwa";
 impi.skill[0].type='b';
 impi.skill[0].cd=-1;
 impi.skill[0].bcd=-1;
-impi.skill[0].des="Deal dmg to an enemy, This attack can't be blocked and will dispel Block if the enemy has.";
+impi.skill[0].des="Deal dmg to an enemy, has 50% defense penetration and applies Defense Down for 2 turns.";
 impi.skill[1].name="Combat Reflexes";
 impi.skill[1].type='s';
 impi.skill[1].cd=0;
-impi.skill[1].bcd=3;
-impi.skill[1].des="Impi gain 100% turn meter and Attack Up for 1 turn";
+impi.skill[1].bcd=4;
+impi.skill[1].des="Impi gain 100% turn meter, Evade and Attack Up for 2 turns";
 champions.push_back(impi);
 
 prophet.name="Prophet";
@@ -369,7 +369,8 @@ eagle.skill[0].name="Obsidian Lance";
 eagle.skill[0].type='b';
 eagle.skill[0].cd=-1;
 eagle.skill[0].bcd=-1;
-eagle.skill[0].des="Deal dmg to an enemy. This attack has 25% defense penetration which is doubled agains enemies without Stealth.";eagle.skill[1].name="Guardian Eagle";
+eagle.skill[0].des="Deal dmg to an enemy. This attack has 25% defense penetration which is doubled agains enemies without Stealth.";
+eagle.skill[1].name="Guardian Eagle";
 eagle.skill[1].type='s';
 eagle.skill[1].cd=0;
 eagle.skill[1].bcd=4;
@@ -418,7 +419,7 @@ gladiator.skill[0].name="Trident Attack";
 gladiator.skill[0].type='b';
 gladiator.skill[0].cd=-1;
 gladiator.skill[0].bcd=-1;
-gladiator.skill[0].des="Deal dmg to an enemy. Applies Defense Down for 2 turns. If the enemy already has Defense Down, Gladiator gains Attack Up for 1 turn.";
+gladiator.skill[0].des="Deal dmg to an enemy. 25% Chance per defeated enemy to applies Defense Down for 2 turns and for Gladiator to gains Attack Up for 1 turn if target already has Defense Down.";
 gladiator.skill[1].name="Quarter Net";
 gladiator.skill[1].type='s';
 gladiator.skill[1].cd=0;
@@ -447,8 +448,8 @@ hoplite.skill[0].des="Deal dmg to an enemy. If Hoplite has Block, heals Greek al
 hoplite.skill[1].name="Phalanx";
 hoplite.skill[1].type='s';
 hoplite.skill[1].cd=0;
-hoplite.skill[1].bcd=4;
-hoplite.skill[1].des="All allies gain Block and Defense Up for 2 turns.";
+hoplite.skill[1].bcd=3;
+hoplite.skill[1].des="All allies gain Block and Defense Up for 1 turns. All allies lose Knock.";
 champions.push_back(hoplite);
 
 hypaspist.name="Hypaspist";
@@ -468,12 +469,12 @@ hypaspist.skill[0].name="Dory Barrage";
 hypaspist.skill[0].type='b';
 hypaspist.skill[0].cd=-1;
 hypaspist.skill[0].bcd=-1;
-hypaspist.skill[0].des="Deal dmg to an enemy 2 times.";
+hypaspist.skill[0].des="Remove Block from an enemy and give it to Hypaspist. Deal dmg to an enemy. Remove all Buffs from Middle-Eastern and attack them again.";
 hypaspist.skill[1].name="Mobilizing";
 hypaspist.skill[1].type='s';
 hypaspist.skill[1].cd=0;
-hypaspist.skill[1].bcd=5;
-hypaspist.skill[1].des="Hypaspist gain 50% turn meter and Speed Up for 2 turns, other allies gain half the amount and have 50% chance to also gain Speed Up for 2 turns.";
+hypaspist.skill[1].bcd=4;
+hypaspist.skill[1].des="Hypaspist gain 50% turn meter and Speed Up for 2 turns. If has Block, gain double turn meter and also Attack Up for 2 turns.";
 champions.push_back(hypaspist);
 
 zande.name="Zande";
@@ -516,12 +517,12 @@ immortal.skill[0].name="Mortal Smack";
 immortal.skill[0].type='b';
 immortal.skill[0].cd=-1;
 immortal.skill[0].bcd=-1;
-immortal.skill[0].des="Deal dmg to an enemy. Applies Heal Block for 1 turn.";
+immortal.skill[0].des="Deal dmg to an enemy. Remove Buff Block from Immortal. 50% Chance to gain Deathproof.";
 immortal.skill[1].name="Immortalize";
 immortal.skill[1].type='s';
 immortal.skill[1].cd=0;
 immortal.skill[1].bcd=2;
-immortal.skill[1].des="Remove Heal Block from Immortal if there is. Recovers 25% of lost HP. Gain Block and Defense Up for 1 turn. Also gain Regeneration for 1 turns.";
+immortal.skill[1].des="Remove Heal Block from Immortal if there is. Recovers 30% of lost HP. Gain 1 Regeneration for 1 turn for each defeated ally.";
 champions.push_back(immortal);
 
 ronin.name="Ronin";
@@ -541,12 +542,12 @@ ronin.skill[0].name="Naginata";
 ronin.skill[0].type='b';
 ronin.skill[0].cd=-1;
 ronin.skill[0].bcd=-1;
-ronin.skill[0].des="Deal dmg to an enemy. Applies Attack Down for 2 turns, if already has Offense Down, applies Defense Down for 2 turns.";
+ronin.skill[0].des="Deal dmg to an enemy. If target has Attack Down, applies Defense Down for 2 turns.";
 ronin.skill[1].name="Intimidating";
 ronin.skill[1].type='s';
 ronin.skill[1].cd=0;
 ronin.skill[1].bcd=3;
-ronin.skill[1].des="Applies Silence to all enemies for 1 turn and remove 25% turn meter. All allies gain Health Up for 1 turn.";
+ronin.skill[1].des="Applies Silenced and Attack Down to target for 2 turns and other enemies for 1 turn. Remove 50% turn meter from all enemies(Double remove on target). Can't be evaded.";
 champions.push_back(ronin);
 
 templar.name="Templar";
@@ -570,7 +571,7 @@ templar.skill[1].name="Breakthrough";
 templar.skill[1].type='s';
 templar.skill[1].cd=0;
 templar.skill[1].bcd=4;
-templar.skill[1].des="If this attack hits, it will dispel all Buffs from the enemy then deals dmg to them. If no buff, reduce Templar's cooldown by 1 and remove 100% turn meter from enemy. Dispel all Debuffs from Templar, if no debuff, gain Regeneration for 1 turn and Block.";
+templar.skill[1].des="Deal damage to an enemy. +15% Damage and +5% Defense Penetration per each defeated ally. Templar heals for 5% of max health and has +25% chance to gain Block per other living ally.";
 champions.push_back(templar);
 
 mongul.name="Mongul";
@@ -590,7 +591,7 @@ mongul.skill[0].name="Mace Smash";
 mongul.skill[0].type='b';
 mongul.skill[0].cd=-1;
 mongul.skill[0].bcd=-1;
-mongul.skill[0].des="Deal dmg to an enemy. Applies Knock for 2 turns, if already has Knock, 50% chance to Stun.";
+mongul.skill[0].des="Deal dmg to an enemy. 50% Chance per Buffs on target to applies Knock for 2 turns, if already has Knock, 25% chance per buffs on target to Stun.";
 mongul.skill[1].name="War Cry";
 mongul.skill[1].type='s';
 mongul.skill[1].cd=0;
@@ -619,8 +620,8 @@ nomad.skill[0].des="Deal dmg to an enemy. If this attack defeats the enemy, all 
 nomad.skill[1].name="Nomadic Survivor";
 nomad.skill[1].type='s';
 nomad.skill[1].cd=0;
-nomad.skill[1].bcd=2;
-nomad.skill[1].des="Nomad gain Attack Up and Speed Up for 1 turns. Nomad also gain Evade.";
+nomad.skill[1].bcd=3;
+nomad.skill[1].des="Nomad gain Attack Up and Speed Up for 1 turns. Nomad also gain Evade. All allies gain +5% turn meter per each buff on all enemies.";
 champions.push_back(nomad);
 
 maori.name="Maori";
@@ -635,16 +636,16 @@ if(maori.tag.size()==0){
 	maori.tag.push_back("Obsidian");
 	maori.tag.push_back("Classical");
 }
-maori.skill[0].name="Shark-Teeth";
+maori.skill[0].name="Cannibal Strike";
 maori.skill[0].type='b';
 maori.skill[0].cd=-1;
 maori.skill[0].bcd=-1;
-maori.skill[0].des="Deal dmg to an enemy. If this attack defeats the enemy, Maori recovers 100% HP.";
+maori.skill[0].des="Deal dmg to an enemy. If this attack defeats the enemy, Maori heals equal to 100% of defeated enemy's max health and gain";
 maori.skill[1].name="Haka";
 maori.skill[1].type='s';
 maori.skill[1].cd=0;
 maori.skill[1].bcd=6;
-maori.skill[1].des="Dispel all Buffs from all enemies and remove 50% turn meter. All allies gain Attack Up for 2 turns and all enemies gain Defense Down for 2 turns. Can't be Evaded.";
+maori.skill[1].des="All enemies gain Silenced for 1 turn which can't be evaded. All allies gain Block, Health Up, Attack Up and Defense Up for 2 turns.";
 champions.push_back(maori);
 
 rajput.name="Rajput";
@@ -664,12 +665,12 @@ rajput.skill[0].name="Katar Slash";
 rajput.skill[0].type='b';
 rajput.skill[0].cd=-1;
 rajput.skill[0].bcd=-1;
-rajput.skill[0].des="Deal dmg to an enemy. Has 50% defense penetration.";
+rajput.skill[0].des="Deal dmg to an enemy. Rajput gains +10% turn meter per each buff on the target.";
 rajput.skill[1].name="Chakram";
 rajput.skill[1].type='s';
 rajput.skill[1].cd=0;
 rajput.skill[1].bcd=4;
-rajput.skill[1].des="Deals dmg to an enemy, if this attack hits, it will continue to attack other random enemies until every enemies is hit by this attack or an enemy evades it. Won't attack enemies with Stealth.";
+rajput.skill[1].des="Deals dmg to an enemy, if this attack hits, it will continue to attack other random enemies until every enemies is hit by this attack unblocked or an enemy evades it.";
 champions.push_back(rajput);
 
 pictish.name="Pictish";
@@ -689,17 +690,66 @@ pictish.skill[0].name="Barbaric Assault";
 pictish.skill[0].type='b';
 pictish.skill[0].cd=-1;
 pictish.skill[0].bcd=-1;
-pictish.skill[0].des="Deal dmg to an enemy. Triple the damage if the enemy blocks.";
+pictish.skill[0].des="Deal dmg to an enemy. Double damage agains enemy without any buffs.";
 pictish.skill[1].name="Furor Celtica";
 pictish.skill[1].type='s';
 pictish.skill[1].cd=0;
 pictish.skill[1].bcd=3;
-pictish.skill[1].des="Deal dmg to all enemies which can't be blocked and will remove block from all enemies.";
-pictish.skill[1].des="Deal dmg to all enemies which can't be blocked and will remove block from all enemies.";
+pictish.skill[1].des="Deal dmg to all enemies. Gain +20% turn meter per enemy hit. Pictish gains Defense Down for 2 turns.";
 champions.push_back(pictish);
+
+gallic.name="Gallic";
+gallic.role="Tank";
+gallic.id=27;
+gallic.hp=156;
+gallic.atk=14;
+gallic.def=14;
+gallic.spd=14;
+if(gallic.tag.size()==0){
+	gallic.tag.push_back("Scandinavian");
+gallic.tag.push_back("Celtic");
+gallic.tag.push_back("Iron");
+gallic.tag.push_back("Classical");
+}
+gallic.skill[0].name="Gallic Bladework";
+gallic.skill[0].type='b';
+gallic.skill[0].cd=-1;
+gallic.skill[0].bcd=-1;
+gallic.skill[0].des="Deal damage to an enemy. If hit a target with Knock, all Celtic allies heal for 5% of max health.";
+gallic.skill[1].name="Shield Crash";
+gallic.skill[1].type='s';
+gallic.skill[1].cd=0;
+gallic.skill[1].bcd=3;
+gallic.skill[1].des="Deal damage to an enemy. Applies Knock for 3 turns. Gallic gains Speed Down for 2 turns.";
+champions.push_back(gallic);
+
+druid.name="Druid";
+druid.role="Support";
+druid.id=28;
+druid.hp=122;
+druid.atk=14;
+druid.def=13;
+druid.spd=12;
+if(druid.tag.size()==0){
+	druid.tag.push_back("Scandinavian");
+druid.tag.push_back("Celtic");
+druid.tag.push_back("Mystic");
+druid.tag.push_back("Classical");
+}
+druid.skill[0].name="Wild Smack";
+druid.skill[0].type='b';
+druid.skill[0].cd=-1;
+druid.skill[0].bcd=-1;
+druid.skill[0].des="Deal dmg to an enemy. +1% chance to Stun and for Druid to gain Attack Down per 2% of Max HP left on the enemy.";
+druid.skill[1].name="Call of the Wild";
+druid.skill[1].type='s';
+druid.skill[1].cd=0;
+druid.skill[1].bcd=3;
+druid.skill[1].des="Swaps Stat Down debuff on all allies into it's opposite. Celtic allies gain 1 Regeneration for 1 turn.";
+champions.push_back(druid);
 }
 void spartarslash(){
-	base_dmg=1.6;
+	base_dmg=1.8;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
@@ -707,12 +757,11 @@ void spartarslash(){
 		if(hit()){
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-		}
-		if(rand()%2>0)gain(turn,"Block",-1);
+		}if(rand()%2>0)gain(turn,"Block",-1);
 	}
 }
 void shieldbash(){
-	base_dmg=2.4;
+	base_dmg=2;
 	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
 	if(enemy!=-2){
 		system("CLS");
@@ -722,9 +771,12 @@ void shieldbash(){
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(!pos[enemy].stun&&pos[turn].block==true&&pos[enemy].hp>0){
 				pos[turn].block=false;
-				cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" loses Block!\n";
 				stun(enemy);
+				cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" loses Block!\n";
 			}
+		}else{
+			remove_turn_meter(enemy,50);
+			gain_turn_meter(turn,50);
 		}
 	}
 }
@@ -757,21 +809,17 @@ void kamikaze(){
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
+		gain(turn,"Deathproof",-1);
 		if(hit()){
+			int temp=enemy;
+			enemy=turn;
+			deal_dmg(base_dmg*0.2,pos[turn].current_stat.def);
+			enemy=temp;
 			block();
-	int dmg;
-	double multiplier,num=20;
-	multiplier=num/(pos[turn].current_stat.def+num);
-	dmg=1.26*pos[turn].current_stat.atk*multiplier;
-	int unstable=dmg/10;
-	if(unstable>0){
-		unstable=(rand()%((unstable*2)+1))-unstable;
-	dmg+=unstable;
-	}
-	pos[turn].hp-=dmg;
-	if(pos[turn].hp<=0)pos[enemy].hp=1;
-	cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" takes "<<dmg<<" damage! HP : "<<pos[turn].hp<<"/"<<pos[turn].current_stat.max_hp<<"\n";
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+		}if(pos[turn].deathproof){
+			pos[turn].deathproof=false;
+		cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" loses Deathproof!\n";
 		}
 	}
 }
@@ -782,16 +830,18 @@ void samurai_skill(int skill_num){
 
 
 void furyswipe(){
-	base_dmg=1.8;
+	base_dmg=1.4;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
 		if(hit()){
-			double multiplier;
-			multiplier=(pos[enemy].hp*100)/pos[enemy].current_stat.max_hp;
-			multiplier/=200;
-			base_dmg+=base_dmg*multiplier;
+			int count=0;
+			for(int i=0;i<10;i++){
+				if(pos[i].player!=pos[turn].player&&pos[i].hp>0)count++;
+			}
+			double multiplier=1+(count*0.2);
+			base_dmg*=multiplier;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 		}
@@ -800,10 +850,11 @@ void furyswipe(){
 void enrage(){
 	system("CLS");
 	skill_use(1);
-	heal(turn,pos[turn].current_stat.max_hp*0.15);
+	heal(turn,pos[turn].current_stat.max_hp*0.3);
 	gain_turn_meter(turn,50);
 	gain(turn,"Attack Up",1);
 	gain(turn,"Speed Up",1);
+	gain(turn,"Defense Down",1);
 }
 void berserker_skill(int skill_num){
 	if(skill_num==1)furyswipe();
@@ -863,7 +914,7 @@ void faithfulpraying(){
 	skill_use(1);
 	for(int i=0;i<10;i++){
 		if(pos[i].player==pos[turn].player&&pos[i].hp>0){
-			int temp=dispel_debuff(i);
+			dispel_debuff(i);
 			heal(i,pos[i].current_stat.max_hp/4);
 		}
 	}
@@ -890,9 +941,9 @@ void scythecleave(){
 void rejuvenate(){
 	system("CLS");
 	skill_use(1);
-	heal(turn,pos[turn].current_stat.max_hp);
-	gain_turn_meter(turn,50);
+	heal(turn,pos[turn].current_stat.max_hp/2);
 	gain(turn,"Attack Up",1);
+	gain(turn,"Deathproof",-1);
 }
 void khopesh_skill(int skill_num){
 	if(skill_num==1)scythecleave();
@@ -901,23 +952,20 @@ void khopesh_skill(int skill_num){
 
 
 void gladiusslash(){
-	base_dmg=1.4;
+	base_dmg=1.6;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
 		if(hit()){
-			for(int i=0;i<10;i++){
-				if(pos[i].player!=pos[turn].player&&pos[i].hp==0)base_dmg+=0.35;
-			}
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			if(rand()%2)gain(turn,"Defense Up",1);
 		}
 	}
 }
 void clearthepath(){
-	base_dmg=2.0;
-	system("CLS");
+	base_dmg=2;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
@@ -926,11 +974,12 @@ void clearthepath(){
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			if(pos[enemy].hp>0){
-				int temp=dispel_buff(enemy);
+				dispel_buff(enemy);
+				gain(enemy,"Knock",2);
 			}
 		}gain(turn,"Protect",1);
 		for(int i=0;i<10;i++){
-			if(pos[i].player==pos[turn].player&&find_tag(i,"Roman")&&i!=turn)gain_turn_meter(i,50);
+			if(pos[i].player==pos[turn].player&&find_tag(i,"Roman"))gain(i,"Defense Up",2);
 		}
 	}
 }
@@ -940,43 +989,44 @@ void legion_skill(int skill_num){
 }
 
 
-void shuriken(){
-	base_dmg=1.4;
+void blackeggassault(){
+	bool another_ally=false;
+	base_dmg=0.8;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
 		if(hit()){
-			if(!pos[enemy].block)base_dmg*=2;
-			else block();
+			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			if(pos[enemy].hp>0&&rand()%2)gain(enemy,"Blind",-1);
+		}for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&i!=turn&&pos[i].hp>0&&pos[i].prior>0){
+				another_ally=true;
+				break;
+			}
+		}if(another_ally)gain(turn,"Stealth",1);
+		else{
+			if(rand()%2)gain(turn,"Evade",-1);
 		}
 	}
 }
-void blackegg(){
-	bool another_ally=false;
-	system("CLS");
-	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+void shuriken(){
+	base_dmg=1.8;
+	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
 		if(hit()){
-			gain(enemy,"Blind",-1);
-		}for(int i=0;i<10;i++){
-			if(pos[i].player==pos[turn].player&&i!=turn&&pos[i].hp>0){
-				another_ally=true;
-				break;
-			}
-		}if(another_ally)gain(turn,"Stealth",2);
-		else{
-			gain(turn,"Evade",-1);
-			gain_turn_meter(turn,50);
+			if(!pos[enemy].block)base_dmg*=3;
+			block();
+			deal_dmg(base_dmg,pos[enemy].current_stat.def);
 		}
 	}
 }
 void ninja_skill(int skill_num){
-	if(skill_num==1)shuriken();
-	else blackegg();
+	if(skill_num==1)blackeggassault();
+	else shuriken();
 }
 
 
@@ -1131,11 +1181,9 @@ void iklwa(){
 		system("CLS");
 		skill_use(0);
 		if(hit()){
-			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].block&&pos[enemy].hp>0){
-				pos[enemy].block=false;
-				cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" loses Block!\n";
-			}
+			block();
+			deal_dmg(base_dmg,pos[enemy].current_stat.def/2);
+			if(pos[enemy].hp>0)gain(enemy,"Defense Down",2);
 		}
 	}
 }
@@ -1143,7 +1191,8 @@ void combatreflexes(){
 	system("CLS");
 		skill_use(1);
 		gain_turn_meter(turn,100);
-		gain(turn,"Attack Up",1);
+		gain(turn,"Attack Up",2);
+		gain(turn,"Evade",-1);
 }
 void impi_skill(int skill_num){
 	if(skill_num==1)iklwa();
@@ -1164,21 +1213,21 @@ void baktunshiftingstrike(){
 			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
 				if(i==turn){
 					if(pos[i].skill[1].cd>0)pos[i].skill[1].cd--;
-					cout<<pos[i].name<<"'s cooldown reduced by 1!\n";
+					cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<"'s cooldown reduced by 1!\n";
 				}else{
 					if(rand()%2==1){
 						if(pos[i].skill[1].cd>0)pos[i].skill[1].cd--;
-						cout<<pos[i].name<<"'s cooldown reduced by 1!\n";
+						cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<"'s cooldown reduced by 1!\n";
 					}
 				}
 			}else if(pos[i].player!=pos[turn].player&&pos[i].hp>0){
 				if(i==enemy){
 					pos[i].skill[1].cd++;
-					cout<<pos[i].name<<"'s cooldown increased by 1!\n";
+					cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<"'s cooldown increased by 1!\n";
 				}else{
 					if(rand()%2==1){
 						pos[i].skill[1].cd++;
-						cout<<pos[i].name<<"'s cooldown increased by 1!\n";
+						cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<"'s cooldown increased by 1!\n";
 					}
 				}
 			}
@@ -1253,7 +1302,7 @@ void risingaltitude(){
 			base_dmg=2.2;
 			block();
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0)int temp=dispel_buff(enemy);
+			if(pos[enemy].hp>0)dispel_buff(enemy);
 			}pos[turn].base_stat.atk++;
 	}
 }
@@ -1264,29 +1313,34 @@ void puma_skill(int skill_num){
 
 
 void tridentattack(){
+	bool has=false;
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
-		bool add=false;
+		int chance=0;
+		for(int i=0;i<10;i++){
+			if(pos[i].hp==0&&pos[i].player!=pos[turn].player)chance+=25;
+		}
 		system("CLS");
 		skill_use(0);
-		if(pos[enemy].def_down>0)add=true;
 		if(hit()){
-			base_dmg=1.4;
+			base_dmg=1.8;
 			block();
+			if(pos[enemy].def_down>0)has=true;
 			deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			if(pos[enemy].hp>0)gain(enemy,"Defense Down",2);
-			}if(add)gain(turn,"Attack Up",1);
+			if(has&&rand()%100<chance)gain(turn,"Attack Up",1);
+			if(pos[enemy].hp>0&&rand()%100<chance)gain(enemy,"Defense Down",2);
+			}
 	}
 }
 void quarternet(){
-	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
 		if(hit()){
 			stun(enemy);
 			remove_turn_meter(enemy,100);
-			int temp=dispel_buff(enemy);
+			dispel_buff(enemy);
 			gain(enemy,"Knock",2);
 			}
 	}
@@ -1321,7 +1375,9 @@ void phalanx(){
 		for(int i=0;i<10;i++){
 			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
 				gain(i,"Block",-1);
-				gain(i,"Defense Up",2);
+				gain(i,"Defense Up",1);
+				pos[i].knock=0;
+				cout<<"Player "<<pos[i].player<<"'s "<<pos[i].name<<" loses Knock!\n";
 			}
 		}
 }
@@ -1336,26 +1392,32 @@ void dorybarrage(){
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
-		for(int i=0;i<2;i++){
 			if(hit()){
-				base_dmg=1.0;
+				if(pos[enemy].block){
+			pos[enemy].block=false;
+			cout<<"Player "<<pos[enemy].player<<"'s "<<pos[enemy].name<<" loses Block!\n";
+			gain(turn,"Block",-1);
+		}base_dmg=0.8;
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}if(pos[enemy].hp>0&&find_tag(enemy,"Middle-Eastern")){
+				dispel_buff(enemy);
+				if(hit()){base_dmg=0.8;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 			}
-		}
+			}
 	}
 }
 void mobilizing(){
 		system("CLS");
 		skill_use(1);
-		gain_turn_meter(turn,50);
-		gain(turn,"Speed Up",2);
-		for(int i=0;i<10;i++){
-			if(pos[i].player==pos[turn].player&&i!=turn&&pos[i].hp>0){
-				gain_turn_meter(i,25);
-				if(rand()%2==1)gain(i,"Speed Up",2);
-			}
+		if(pos[turn].block){
+			gain_turn_meter(turn,100);
+			gain(turn,"Attack Up",2);
 		}
+		else gain_turn_meter(turn,50);
+		gain(turn,"Speed Up",2);
 }
 void hypaspist_skill(int skill_num){
 	if(skill_num==1)dorybarrage();
@@ -1380,7 +1442,8 @@ void decapitator(){
 void savagespirit(){
 		system("CLS");
 		skill_use(1);
-		int count=dispel_debuff(turn);
+		int count=count_app(turn,"Debuff");
+		dispel_debuff(turn);
 		if(count>0){
 			gain_turn_meter(turn,20*count);
 		heal(turn,pos[turn].current_stat.max_hp*0.15*count);
@@ -1398,11 +1461,13 @@ void mortalsmack(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.8;
+				base_dmg=1.6;
 				block();
-				deal_dmg(base_dmg,pos[enemy].current_stat.def);
-				if(pos[enemy].hp>0)gain(enemy,"Heal Block",1);
-			}
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);	
+			}if(pos[turn].buff_block){
+			pos[turn].buff_block=0;
+			cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" loses Buff Block!\n";
+		}if(rand()%2)gain(turn,"Deathproof",-1);
 	}
 }
 void immortalize(){
@@ -1412,10 +1477,10 @@ void immortalize(){
 			pos[turn].heal_block=0;
 			cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<" loses Heal Block!\n";
 		}int lost_hp=pos[turn].current_stat.max_hp-pos[turn].hp;
-		heal(turn,lost_hp/4);
-		gain(turn,"Block",-1);
-		gain(turn,"Defense Up",1);
-		gain_regeneration(turn,1);
+		heal(turn,lost_hp*0.3);
+		for(int i=0;i<10;i++){
+			if(pos[i].hp==0&&pos[i].player==pos[turn].player)gain_regeneration(turn,1);
+		}
 }
 void immortal_skill(int skill_num){
 	if(skill_num==1)mortalsmack();
@@ -1433,25 +1498,29 @@ void naginata(){
 				base_dmg=1.4;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
-				if(pos[enemy].hp>0){
-					if(pos[enemy].atk_down>0)gain(enemy,"Defense Down",2);
-					gain(enemy,"Attack Down",2);
-				}
+				if(pos[enemy].hp>0&&pos[enemy].atk_down)gain(enemy,"Defense Down",2);
 			}
 	}
 }
 void intimidating(){
+	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
+	if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
 		for(int i=0;i<10;i++){
 			if(pos[i].hp>0&&pos[i].player!=pos[turn].player){
-				gain(i,"Silence",1);
-				gain(i,"Heal Block",1);
-			}else if(pos[i].hp>0){
-				gain(i,"Health Up",1);
-				if(find_tag(i,"Japanese"))gain(i,"Defense Up",1);
+				if(i==enemy){
+					gain(enemy,"Silence",2);
+					gain(enemy,"Attack Down",2);
+					remove_turn_meter(enemy,100);
+				}else{
+					gain(i,"Silence",1);
+					gain(i,"Attack Down",1);
+					remove_turn_meter(i,50);
+				}
 			}
 		}
+	}	
 }
 void ronin_skill(int skill_num){
 	if(skill_num==1)naginata();
@@ -1463,22 +1532,24 @@ void ronin_skill(int skill_num){
 void breakthrough(){
 	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
 	if(enemy!=-2){
+		double def_mul=1,dmg_mul=1;
+		int oalive=0;
 		system("CLS");
 		skill_use(1);
 			if(hit()){
-				base_dmg=2.8;
-				int count=dispel_buff(enemy);
-				if(count==0){
-					pos[turn].skill[1].cd--;
-					cout<<"Player "<<pos[turn].player<<"'s "<<pos[turn].name<<"'s cooldown reduced by 1!\n";
-					remove_turn_meter(enemy,100);
-				}
+				base_dmg=4;
+				for(int i=0;i<10;i++){
+					if(pos[i].hp==0&&pos[i].player==pos[turn].player){
+						dmg_mul+=0.15;
+						def_mul-=0.05;
+					}
+				}base_dmg*=dmg_mul;
 				block();
-				deal_dmg(base_dmg,pos[enemy].current_stat.def);
-	}int temp=dispel_debuff(turn);
-	if(temp==0){
-		gain(turn,"Block",-1);
-		gain_regeneration(turn,1);
+				deal_dmg(base_dmg,pos[enemy].current_stat.def*def_mul);
+	}for(int i=0;i<10;i++){
+		if(pos[i].hp>0&&pos[i].player==pos[turn].player&&i!=turn)oalive++;
+		heal(turn,pos[turn].current_stat.max_hp*0.05*oalive);
+		if(rand()%100<oalive*25)gain(turn,"Block",-1);
 	}
 }
 }
@@ -1514,14 +1585,15 @@ void macesmash(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.2;
+				int num=count_app(enemy,"Buff");
+				base_dmg=1.8;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				if(pos[enemy].hp>0){
 					if(pos[enemy].knock>0){
-						if(rand()%2==1)stun(enemy);
+						if(rand()%100<25*num)stun(enemy);
 					}
-					gain(enemy,"Knock",2);
+					if(rand()%100<50*num)gain(enemy,"Knock",2);
 				}
 			}
 	}
@@ -1567,6 +1639,13 @@ void nomadicsurvivor(){
 		gain(turn,"Attack Up",1);
 		gain(turn,"Speed Up,",1);
 		gain(turn,"Evade",-1);
+		int all_buff=0;
+		for(int i=0;i<10;i++){
+			if(pos[i].hp>0&&pos[i].player!=pos[turn].player)all_buff+=count_app(i,"Buff");
+		}
+		for(int i=0;i<10;i++){
+			if(pos[i].hp>0&&pos[i].player==pos[turn].player)gain_turn_meter(i,5*all_buff);
+		}
 }
 void nomad_skill(int skill_num){
 	if(skill_num==1)manhunting();
@@ -1575,16 +1654,16 @@ void nomad_skill(int skill_num){
 
 
 
-void sharkteeth(){
+void cannibalstrike(){
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.4;
+				base_dmg=1.6;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
-				if(pos[enemy].hp==0)heal(turn,pos[turn].current_stat.max_hp);
+				if(pos[enemy].hp==0)heal(turn,pos[enemy].current_stat.max_hp);
 			}
 	}
 }
@@ -1593,14 +1672,17 @@ void haka(){
 		skill_use(1);
 		for(int i=0;i<10;i++){
 			if(pos[i].hp>0&&pos[i].player!=pos[turn].player){
-				dispel_buff(i);
-				remove_turn_meter(i,50);
-				gain(i,"Defense Down",2);
-			}else if(pos[i].hp>0)gain(i,"Attack Up",2);
+				gain(i,"Silenced",1);
+			}else if(pos[i].hp>0&&pos[i].player==pos[turn].player){
+				gain(i,"Health Up",2);
+				gain(i,"Attack Up",2);
+				gain(i,"Defense Up",2);
+				gain(i,"Block",-1);
+			}
 		}
 }
 void maori_skill(int skill_num){
-	if(skill_num==1)sharkteeth();
+	if(skill_num==1)cannibalstrike();
 	else haka();
 }
 
@@ -1612,9 +1694,11 @@ void katarslash(){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.8;
+				base_dmg=1.6;
+				int num=count_app(enemy,"Buff");
 				block();
-				deal_dmg(base_dmg,pos[enemy].current_stat.def/2);
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(num>0)gain_turn_meter(turn,10*num);
 			}
 	}
 }
@@ -1626,18 +1710,19 @@ void chakram(){
 		system("CLS");
 		skill_use(1);
 			if(hit()){
-				base_dmg=3.4;
+				base_dmg=2.4;
+				if(pos[enemy].block)temp.push_back(enemy);
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
 				for(int i=0;i<10;i++){
-					if(pos[i].hp>0&&pos[i].player!=pos[turn].player&&pos[i].stealth==0&&i!=enemy)temp.push_back(i);
+					if(pos[i].hp>0&&pos[i].player!=pos[turn].player&&i!=enemy)temp.push_back(i);
 				}
 					while(temp.size()>0){
 						random=rand()%temp.size();
 						enemy=temp[random];
-						temp.erase(temp.begin()+random);
+						if(!pos[enemy].block)temp.erase(temp.begin()+random);
 						if(hit()){
-							base_dmg=3.4;
+							base_dmg=2.4;
 							block();
 							deal_dmg(base_dmg,pos[enemy].current_stat.def);
 						}else break;
@@ -1649,61 +1734,124 @@ void rajput_skill(int skill_num){
 	if(skill_num==1)katarslash();
 	else chakram();
 }
-/*gallic.name="Gallic";
-gallic.role="Tank";
-gallic.id=27;
-gallic.hp=156;
-gallic.atk=14;
-gallic.def=14;
-gallic.spd=14;
-gallic.tag.push_back("Scandinavian");
-gallic.tag.push_back("Celtic");
-gallic.tag.push_back("Iron");
-gallic.tag.push_back("Classical");
-gallic.skill[0].name="Gallic Bladework";
-gallic.skill[0].type='b';
-gallic.skill[0].cd=-1;
-gallic.skill[0].bcd=-1;
-gallic.skill[0].des="Deal dmg to an enemy. Gallic heals for 10% of max HP. Other Celtic allies heal for 5% of max HP.";
-gallic.skill[1].name="Shield Crash";
-gallic.skill[1].type='s';
-gallic.skill[1].cd=0;
-gallic.skill[1].bcd=3;
-gallic.skill[1].des="If this attack hits, dispel all Buffs from the enemy, for each buff removed, all alies heal for 5% HP.";
-champions.push_back(gallic);
-void gallicbladework(){
+
+
+void barbaricassault(){
 	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
 	if(enemy!=-2){
 		system("CLS");
 		skill_use(0);
 			if(hit()){
-				base_dmg=1.4;
+				base_dmg=1.2;
+				if(count_app(enemy,"Buff")==0)base_dmg*=2;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			}heal(turn,pos[turn].current_stat.max_hp/10);
-			for(int i=0;i<10;i++){
-				if(pos[i].hp>0&&pos[i].player==pos[turn].player&&find_tag(i,"Celtic")&&)heal(i,pos[i].current_stat.max_hp/20);
+			}
+	}
+}
+void furorceltica(){
+	int hit_count=0;
+		system("CLS");
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].hp>0&&pos[i].player!=pos[turn].player){
+				enemy=i;
+				if(hit()){
+				hit_count++;
+				base_dmg=3.4;
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}
+			}
+		}gain_turn_meter(turn,hit_count*20);
+		gain(turn,"Defense Down",2);
+	}
+void pictish_skill(int skill_num){
+	if(skill_num==1)barbaricassault();
+	else furorceltica();
+}
+
+
+void gallicbladework(){
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		bool has=false;
+		system("CLS");
+		skill_use(0);
+			if(hit()){
+				if(pos[enemy].knock)has=true;
+				base_dmg=1.8;
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+			}if(has){
+				for(int i=0;i<10;i++){
+				if(pos[i].hp>0&&pos[i].player==pos[turn].player&&find_tag(i,"Celtic"))heal(i,pos[i].current_stat.max_hp/20);
+			}
 			}
 	}
 }
 void shieldcrash(){
 	int count=0;
-	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	enemy=targetenemy(pos[turn].skill[1].name,pos[turn].skill[1].des);
 		if(enemy!=-2){
 		system("CLS");
 		skill_use(1);
 			if(hit()){
-				base_dmg=2.2;
-				count=dispel_buff(enemy);
+				base_dmg=3.2;
 				block();
 				deal_dmg(base_dmg,pos[enemy].current_stat.def);
-			}heal(turn,pos[turn].current_stat.max_hp/10);
-			for(int i=0;i<10;i++){
-				if(pos[i].hp>0&&pos[i].player==pos[turn].player&&find_tag(i,"Celtic")&&)heal(i,pos[i].current_stat.max_hp/20);
+				if(pos[enemy].hp>0)gain(enemy,"Knock",3);
+			}gain(turn,"Speed Down",2);
+	}
+	}
+void gallic_skill(int skill_num){
+	if(skill_num==1)gallicbladework();
+	else shieldcrash();
+}
+
+
+
+void wildsmack(){
+	int percentage;
+	enemy=targetenemy(pos[turn].skill[0].name,pos[turn].skill[0].des);
+	if(enemy!=-2){
+		system("CLS");
+		skill_use(0);
+		percentage=(pos[enemy].hp*100)/pos[enemy].current_stat.max_hp;
+				percentage/=100;
+				percentage/=2;
+			if(hit()){
+				base_dmg=1.8;
+				block();
+				deal_dmg(base_dmg,pos[enemy].current_stat.def);
+				if(pos[enemy].hp>0){
+					if(rand()%100<percentage)stun(enemy);
+				}
+			}if(rand()%100<percentage)gain(turn,"Attack Down",2);
+	}
+}
+void callofthewild(){
+		system("CLS");
+		skill_use(1);
+		for(int i=0;i<10;i++){
+			if(pos[i].player==pos[turn].player&&pos[i].hp>0){
+				if(pos[i].hp_down){
+					gain(i,"Health Up",pos[i].hp_down);
+					pos[i].hp_down=0;
+				}if(pos[i].atk_down){
+					gain(i,"Attack Up",pos[i].atk_down);
+					pos[i].atk_down=0;
+				}if(pos[i].def_down){
+					gain(i,"Defense Up",pos[i].def_down);
+					pos[i].def_down=0;
+				}if(pos[i].spd_down){
+					gain(i,"Speed Up",pos[i].spd_down);
+					pos[i].spd_down=0;
+				}if(find_tag(i,"Celtic"))gain_regeneration(i,1);
 			}
+		}
 	}
-	}
-void pictish_skill(int skill_num){
-	if(skill_num==1)barbaricassault();
-	else furorceltica();
-}*/
+void druid_skill(int skill_num){
+	if(skill_num==1)wildsmack();
+	else callofthewild();
+}
